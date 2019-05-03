@@ -54,8 +54,8 @@ class TestCore(unittest.TestCase):
         results = citycat_output.Results(self.get_file_name(0))
         results.read_locations()
         results.read_variables()
-        results.create_array()
-        self.assertIsInstance(results.array, cls=np.ndarray)
+        results.create_arrays()
+        self.assertIsInstance(results.depth, cls=np.ndarray)
 
     def test_create_array_with_locations(self):
         results = citycat_output.Results(self.get_file_name(0))
@@ -63,8 +63,8 @@ class TestCore(unittest.TestCase):
         other_results = citycat_output.Results(self.get_file_name(5))
         other_results.read_locations()
         results.set_locations(other_results.locations)
-        results.create_array()
-        self.assertIsInstance(results.array, cls=np.ndarray)
+        results.create_arrays()
+        self.assertIsInstance(results.depth, cls=np.ndarray)
 
     def test_getting_paths(self):
         run = citycat_output.Run(self.folder)

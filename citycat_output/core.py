@@ -1,6 +1,7 @@
 import netCDF4 as nc
 import pandas as pd
 import os
+import numpy as np
 
 
 class Results:
@@ -8,12 +9,15 @@ class Results:
         self.path = path
         self.variables = None
         self.locations = None
-        self.df = None
-        self.array = None
         self.x = None
         self.y = None
         self.x_size = None
         self.y_size = None
+        self.x_index = None
+        self.y_index = None
+        self.depth = None
+        self.x_velocity = None
+        self.y_velocity = None
         self.time = int(os.path.basename(path).split('min')[0].split('_')[-1].split('.')[0])
         self.step = int(os.path.basename(path).split('min')[0].split('_')[2][1:])
 
@@ -33,18 +37,23 @@ class Results:
     def _get_xy(self):
         assert self.locations is not None, 'Locations must be read in first'
 
-        self.x = sorted(self.locations['XCen'].unique())
-        self.y = sorted(self.locations['YCen'].unique())
+        self.x, self.x_index = np.unique(self.locations['XCen'].values, return_inverse=True)
+        self.y, self.y_index = np.unique(self.locations['YCen'].values, return_inverse=True)
 
         self.x_size = len(self.x)
         self.y_size = len(self.y)
 
-    def create_array(self):
+    def create_arrays(self):
         assert self.locations is not None, 'Locations must be read in first'
         assert self.variables is not None, 'Variables must be read in first'
 
-        self.df: pd.DataFrame = pd.concat([self.locations, self.variables], axis=1)
-        self.array = self.df.pivot('XCen', 'YCen').values.transpose().reshape(-1, self.x_size, self.y_size)
+        self.depth = np.full((self.y_size, self.x_size), float('NaN'))
+        self.x_velocity = np.full((self.y_size, self.x_size), float('NaN'))
+        self.y_velocity = np.full((self.y_size, self.x_size), float('NaN'))
+
+        self.depth[self.y_index, self.x_index] = self.variables.Depth.values
+        self.x_velocity[self.y_index, self.x_index] = self.variables.Vx.values
+        self.y_velocity[self.y_index, self.x_index] = self.variables.Vy.values
 
 
 class Run:
@@ -93,11 +102,11 @@ class Run:
             rsl = Results(path)
             rsl.read_variables()
             rsl.set_locations(first_results.locations)
-            rsl.create_array()
+            rsl.create_arrays()
 
-            depth[rsl.step, :, :] = rsl.array[0]
-            x_vel[rsl.step, :, :] = rsl.array[1]
-            y_vel[rsl.step, :, :] = rsl.array[2]
+            depth[rsl.step, :, :] = rsl.depth
+            x_vel[rsl.step, :, :] = rsl.x_velocity
+            y_vel[rsl.step, :, :] = rsl.y_velocity
 
         times[:] = [Results(path).time for path in self.results]
         x_variable[:] = first_results.x
