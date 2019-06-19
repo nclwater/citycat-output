@@ -21,6 +21,7 @@ class Run:
         self.depth = None
         self.x_velocity = None
         self.y_velocity = None
+        self.max_depth = None
         self.times = None
         self.steps = None
 
@@ -56,6 +57,7 @@ class Run:
         self.depth = np.full((self.y_size, self.x_size), float('NaN'))
         self.x_velocity = np.full((self.y_size, self.x_size), float('NaN'))
         self.y_velocity = np.full((self.y_size, self.x_size), float('NaN'))
+        self.max_depth = np.full((self.y_size, self.x_size), float('NaN'))
 
     def set_array_values(self):
         assert self.depth is not None, 'Arrays must be created first'
@@ -63,6 +65,7 @@ class Run:
         self.depth[self.y_index, self.x_index] = self.variables.Depth.values
         self.x_velocity[self.y_index, self.x_index] = self.variables.Vx.values
         self.y_velocity[self.y_index, self.x_index] = self.variables.Vy.values
+        self.max_depth = np.nanmax([self.max_depth, self.depth], axis=0)
 
     def read_file_paths(self):
 
@@ -113,6 +116,7 @@ class Run:
         depth = ds.createVariable("depth", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
         x_vel = ds.createVariable("x_vel", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
         y_vel = ds.createVariable("y_vel", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        max_depth = ds.createVariable("max_depth", "f4", ("y", "x",), zlib=True, least_significant_digit=3)
         x_variable = ds.createVariable("x", "f4", ("x",), zlib=True)
         y_variable = ds.createVariable("y", "f4", ("y",), zlib=True)
         times = ds.createVariable("time", "f8", ("time",), zlib=True)
@@ -125,6 +129,8 @@ class Run:
             depth[self.steps[i], :, :] = self.depth
             x_vel[self.steps[i], :, :] = self.x_velocity
             y_vel[self.steps[i], :, :] = self.y_velocity
+
+        max_depth[:] = self.max_depth
 
         times[:] = self.times
         x_variable[:] = self.x

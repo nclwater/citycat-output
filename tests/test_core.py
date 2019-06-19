@@ -90,6 +90,7 @@ class TestCore(unittest.TestCase):
         self.assertIsNotNone(ds)
         self.assertIsNotNone(ds.variables['crs'])
         self.assertEqual(ds.key, 'value')
+        self.assertTrue(np.nanmax(ds.variables['max_depth'][:]) > 0)
         ds.close()
 
     def test_to_netcdf_attribute_names_are_strings(self):
