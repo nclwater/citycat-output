@@ -10,4 +10,5 @@ setup(name='citycat_output',
       packages=['citycat_output'],
       zip_safe=False,
       install_requires=['netCDF4',
-                        'pandas'])
+                        'pandas',
+                        'gdal'])

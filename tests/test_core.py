@@ -5,6 +5,7 @@ import numpy as np
 import os
 import shutil
 import netCDF4 as nc
+import datetime
 
 
 class TestCore(unittest.TestCase):
@@ -84,12 +85,32 @@ class TestCore(unittest.TestCase):
 
     def test_to_netcdf(self):
         run = citycat_output.Run(self.folder)
-        run.read_file_paths()
-        run.to_netcdf(self.netcdf_path)
+        run.to_netcdf(self.netcdf_path, srid=27700, attributes={'key': 'value',})
         ds = nc.Dataset(self.netcdf_path)
         self.assertIsNotNone(ds)
+        self.assertIsNotNone(ds.variables['crs'])
+        self.assertEqual(ds.key, 'value')
         ds.close()
 
+    def test_to_netcdf_attribute_names_are_strings(self):
+        with self.assertRaises(AssertionError):
+            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={123: 'value'})
+
+    def test_to_netcdf_attribute_names_start_with_letter(self):
+        with self.assertRaises(AssertionError):
+            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'1key': 'value'})
+
+    def test_to_netcdf_attribute_names_are_alphanumeric(self):
+        with self.assertRaises(AssertionError):
+            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'key*': 'value'})
+
+    def test_to_netcdf_attribute_value_type(self):
+        with self.assertRaises(AssertionError):
+            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'key': datetime.datetime.now()})
+
+    def test_to_netcdf_attribute_value_types(self):
+        with self.assertRaises(AssertionError):
+            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'key': [datetime.datetime.now()]})
 
 if __name__ == '__main__':
     unittest.main()

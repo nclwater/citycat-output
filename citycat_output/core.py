@@ -2,6 +2,8 @@ import netCDF4 as nc
 import pandas as pd
 import os
 import numpy as np
+from gdal import osr
+from datetime import datetime
 
 
 class Run:
@@ -69,10 +71,29 @@ class Run:
 
         self.file_paths.sort(key=path_to_step)
 
-    def to_netcdf(self, path=None, srid=None):
+    def to_netcdf(self, path: str = None, srid: int = None, attributes: dict = None):
+        """Converts CityCAT results to a netCDF file
 
-        if self.file_paths is None:
-            self.read_file_paths()
+            :param path: path to store netCDF
+            :param srid: EPSG Spatial Reference System Identifier of results files
+            :param attributes: Dictionary of key-value pairs to store as netCDF attributes
+                Keys must begin with an alphabetic character and be alphanumeric, underscore is allowed
+        """
+
+        if attributes is not None:
+            for key in attributes.keys():
+                assert type(key) == str, 'Attribute names must be strings, {} is a {}'.format(key, type(key))
+                assert key[0].isalpha(), '{} must begin with an alphabetic character'.format(key)
+                assert all(char == '_' or char.isdigit() or char.isalpha() for char in key), \
+                    '{} is not alphanumeric (including underscore)'.format(key)
+                val = attributes[key]
+                allowed_attribute_types = [float, int,  str]
+                try:
+                    assert all(type(item) in allowed_attribute_types for item in val), \
+                        'Attribute value types must be one of {}'.format(allowed_attribute_types)
+                except TypeError:
+                    assert type(val) in allowed_attribute_types, \
+                        'Attribute value type must be one of {}'.format(allowed_attribute_types)
 
         if path is None:
             path = os.path.join(os.path.dirname(self.folder_path), os.path.basename(self.folder_path) + '.nc')
@@ -80,21 +101,21 @@ class Run:
         if os.path.exists(path):
             os.remove(path)
 
-        group = nc.Dataset(path, "w", format="NETCDF4")
+        ds = nc.Dataset(path, "w", format="NETCDF4")
 
         self.read_locations()
         self.create_arrays()
 
-        group.createDimension("time", None)
-        group.createDimension("x", self.x_size)
-        group.createDimension("y", self.y_size)
+        ds.createDimension("time", None)
+        ds.createDimension("x", self.x_size)
+        ds.createDimension("y", self.y_size)
 
-        depth = group.createVariable("depth", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
-        x_vel = group.createVariable("x_vel", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
-        y_vel = group.createVariable("y_vel", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
-        x_variable = group.createVariable("x", "f4", ("x",), zlib=True)
-        y_variable = group.createVariable("y", "f4", ("y",), zlib=True)
-        times = group.createVariable("time", "f8", ("time",), zlib=True)
+        depth = ds.createVariable("depth", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        x_vel = ds.createVariable("x_vel", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        y_vel = ds.createVariable("y_vel", "f4", ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        x_variable = ds.createVariable("x", "f4", ("x",), zlib=True)
+        y_variable = ds.createVariable("y", "f4", ("y",), zlib=True)
+        times = ds.createVariable("time", "f8", ("time",), zlib=True)
 
         for i in range(len(self.file_paths)):
 
@@ -110,17 +131,37 @@ class Run:
         y_variable[:] = self.y
 
         if srid is not None:
-            import osr
             srs = osr.SpatialReference()
             srs.ImportFromEPSG(srid)
-            depth.setncattr('grid_mapping', 'spatial_ref')
-            x_vel.setncattr('grid_mapping', 'spatial_ref')
-            y_vel.setncattr('grid_mapping', 'spatial_ref')
+            depth.grid_mapping = 'crs'
+            x_vel.grid_mapping = 'crs'
+            y_vel.grid_mapping = 'crs'
 
-            crs = group.createVariable('spatial_ref', 'i4')
+            crs = ds.createVariable('crs', 'i4')
             crs.spatial_ref = srs.ExportToWkt()
+            crs.grid_mapping_name = srs.GetAttrValue('projection').lower()
+            crs.scale_factor_at_central_meridian = srs.GetProjParm('scale_factor')
+            crs.longitude_of_central_meridian = srs.GetProjParm('central_meridian')
+            crs.latitude_of_projection_origin = srs.GetProjParm('latitude_of_origin')
+            crs.false_easting = srs.GetProjParm('false_easting')
+            crs.false_northing = srs.GetProjParm('false_northing')
 
-        group.close()
+        ds.Conventions = 'CF-1.6'
+        ds.institution = 'Newcastle University'
+        ds.source = 'CityCAT Model Results'
+        ds.references = 'Glenis, V., Kutija, V. & Kilsby, C.G. (2018) '\
+                        'A fully hydrodynamic urban flood modelling system '\
+                        'representing buildings, green space and interventions. '\
+                        'Environmental Modelling and Software. 109 (August), 272–292'
+
+        ds.title = 'CityCAT Model Results'
+        ds.history = 'Created {}'.format(datetime.now())
+
+        if attributes is not None:
+            for key in attributes.keys():
+                ds.setncattr(key, attributes[key])
+
+        ds.close()
 
 
 def path_to_step(path):
