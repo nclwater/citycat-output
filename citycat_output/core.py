@@ -5,6 +5,8 @@ import numpy as np
 from gdal import osr
 from datetime import datetime
 import rasterio as rio
+from rasterio.mask import mask
+from shapely.geometry import box, mapping
 
 
 datatype = "f4"
@@ -86,9 +88,8 @@ class Run:
         
     def read_dem_values(self):
         dem = rio.open(os.path.join(os.path.dirname(self.folder_path), 'Domain_DEM.ASC'))
-        band = dem.read(1)
-        extent = np.where(band != dem.nodata)
-        band = band[extent[0].min(): extent[0].max() + 1, extent[1].min(): extent[1].max() + 1]
+        bbox = box(min(self.x), min(self.y), max(self.x), max(self.y))
+        band, transform = mask(dem, shapes=[mapping(bbox)], crop=True)
         band[band == dem.nodata] = fill_value
         dem_var = self.ds.createVariable('dem', datatype, dimensions=('y', 'x'))
         dem_var[:] = band
