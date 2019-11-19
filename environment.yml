@@ -1,0 +1,7 @@
+dependencies:
+  - PyInstaller
+  - netCDF4
+  - pandas
+  - gdal
+  - pyqt
+

@@ -1,7 +1,9 @@
 # -*- mode: python -*-
+import subprocess
 
 block_cipher = None
 
+version = subprocess.check_output("git describe").strip().decode()
 
 a = Analysis(['ui.py', 'ui.spec'],
              pathex=['.'],
@@ -22,7 +24,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='citycat_output',
+          name='CityCAT-Output-Converter-{}'.format(version),
           debug=False,
           strip=False,
           upx=True,
