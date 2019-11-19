@@ -2,6 +2,8 @@ dependencies:
   - PyInstaller
   - netCDF4
   - pandas
-  - gdal
+  - gdal==2.3.3
   - pyqt
+  - rasterio
+  - shapely
 

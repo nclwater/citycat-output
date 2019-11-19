@@ -22,8 +22,8 @@ class TestCore(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         print('setup')
-        x = [1, 1, 2]
-        y = [1, 2, 1]
+        x = [5, 5, 15]
+        y = [5, 15, 15]
         os.mkdir(cls.folder)
         for i in cls.steps:
             pd.DataFrame({
@@ -35,14 +35,14 @@ class TestCore(unittest.TestCase):
                 'T_0.000_sec': [None] * 3}).to_csv(cls.get_file_name(i), sep=' ')
         with open(cls.dem_path, 'w') as f:
             f.write(
-                "ncols        {}\n".format(len(set(x))) +
+                "ncols        {}\n".format(len(set(x)) + 1) +
                 "nrows        {}\n".format(len(set(y))) +
                 "xllcorner    0\n"
                 "yllcorner    0\n"
                 "cellsize     10\n"
                 "NODATA_value  -9999\n"
-                "5 5\n"
-                "5 5\n"
+                "5 5 -9999\n"
+                "5 5 -9999\n"
             )
 
     @classmethod

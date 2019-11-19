@@ -89,8 +89,8 @@ class Run:
     def read_dem_values(self):
         dem = rio.open(os.path.join(os.path.dirname(self.folder_path), 'Domain_DEM.ASC'))
         bbox = box(min(self.x), min(self.y), max(self.x), max(self.y))
-        band, transform = mask(dem, shapes=[mapping(bbox)], crop=True)
-        band[band == dem.nodata] = fill_value
+        band, transform = mask(dem, shapes=[mapping(bbox)], crop=True, all_touched=True)
+        band.astype(float)[band == dem.nodata] = fill_value
         dem_var = self.ds.createVariable('dem', datatype, dimensions=('y', 'x'))
         dem_var[:] = band
         return dem_var
