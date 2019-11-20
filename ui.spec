@@ -1,15 +1,26 @@
 # -*- mode: python -*-
 import subprocess
+from PyInstaller.utils.hooks import collect_data_files
 
 block_cipher = None
 
 version = subprocess.check_output("git describe").strip().decode()
 
+osgeo_binaries = collect_data_files('osgeo', include_py_files=True)
+
+block_cipher = None
+
+binaries = []
+for p, lib in osgeo_binaries:
+    if '.pyd' in p:
+        binaries.append((p, '.'))
+
 a = Analysis(['ui.py', 'ui.spec'],
              pathex=['.'],
-             binaries=[],
+             binaries=binaries,
              datas=[],
-             hiddenimports=['cftime'],
+             hiddenimports=['cftime', 'rasterio._shim', 'rasterio.control', 'rasterio._io', 'rasterio.sample',
+                            'rasterio.vrt'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -25,8 +36,9 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           name='CityCAT-Output-Converter-{}'.format(version),
-          debug=False,
+          debug=True,
           strip=False,
-          upx=True,
+          upx=False,
+          # upx_exclude=['vcruntime140.dll', 'qwindows.dll'],
           runtime_tmpdir=None,
           console=True )
