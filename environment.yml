@@ -1,9 +1,7 @@
-dependencies:
-  - PyInstaller
-  - netCDF4
-  - pandas
-  - gdal==2.3.3
-  - pyqt
-  - rasterio
-  - shapely
+channels:
+  - conda-forge
 
+dependencies:
+  - geopandas
+  - rasterio
+  - netCDF4

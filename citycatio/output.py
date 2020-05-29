@@ -12,7 +12,8 @@ from shapely.geometry import box, mapping
 datatype = "f4"
 fill_value = nc.default_fillvals[datatype]
 
-class Run:
+
+class Output:
     def __init__(self, path, read_dem=True, start_time=datetime(1, 1, 1)):
         self.folder_path = path
         self.read_dem = read_dem
