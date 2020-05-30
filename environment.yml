@@ -5,3 +5,4 @@ dependencies:
   - geopandas
   - rasterio
   - netCDF4
+  - psycopg2
