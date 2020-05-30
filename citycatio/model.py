@@ -9,7 +9,7 @@ from typing import Optional
 class Model:
     def __init__(
             self,
-            dem: rio.DatasetReader,
+            dem: rio.MemoryFile,
             rainfall: pd.DataFrame,
             rainfall_polygons: Optional[gpd.GeoDataFrame] = None,
             buildings: Optional[gpd.GeoDataFrame] = None,
@@ -18,12 +18,12 @@ class Model:
             friction: Optional[gpd.GeoDataFrame] = None,
             boundaries: Optional[gpd.GeoDataFrame] = None,
     ):
-        self.dem = inputs.dem.validate(dem)
-        self.rainfall = inputs.rainfall.validate(rainfall),
-        self.rainfall_polygons = inputs.rainfall_polygons.validate(rainfall_polygons),
-        self.buildings = inputs.buildings.validate(buildings),
-        self.green_areas = inputs.green_areas.validate(green_areas),
-        self.configuration = inputs.configuration.validate(configuration),
-        self.friction = inputs.friction.validate(friction),
-        self.boundaries = inputs.boundaries.validate(boundaries),
+        self.dem = inputs.Dem(dem)
+        self.rainfall = inputs.Rainfall(rainfall),
+        self.rainfall_polygons = inputs.RainfallPolygons(rainfall_polygons),
+        self.buildings = inputs.Buildings(buildings),
+        self.green_areas = inputs.GreenAreas(green_areas),
+        self.configuration = inputs.Configuration(configuration),
+        self.friction = inputs.Friction(friction),
+        self.boundaries = inputs.Boundaries(boundaries),
         self.output: Optional[Output] = None

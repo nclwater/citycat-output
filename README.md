@@ -1,15 +1,11 @@
-# CityCAT Output Converter
+# CityCAT I/O
 
-## Features
+CityCAT I/O is a Python package that creates input files and reads output files.
 
-- Reads CityCAT results and converts to netCDF
-- Calculates maximum depth
-- Includes domain DEM in netCDF
-- Start date is assumed to be 01-01-0001
-- Additional functionality available in Python library
+## Tests
 
-## Usage
+`python -m unittest`
 
-- Download latest release and navigate to a folder containing .rsl files
+## Dependencies
 
-
+See environment.yml

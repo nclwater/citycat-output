@@ -1,10 +1,10 @@
 import geopandas as gpd
 
 
-def validate(friction: gpd.GeoDataFrame):
-    assert type(friction) == gpd.GeoDataFrame
-    return friction
+class Friction:
+    def __init__(self, data: gpd.GeoDataFrame):
+        assert type(data) == gpd.GeoDataFrame
+        self.data = data
 
-
-def write(friction: gpd.GeoDataFrame):
-    pass
+    def write(self):
+        pass

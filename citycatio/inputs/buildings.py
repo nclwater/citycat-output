@@ -1,10 +1,10 @@
 import geopandas as gpd
 
 
-def validate(buildings: gpd.GeoDataFrame):
-    assert type(buildings) == gpd.GeoDataFrame
-    return buildings
+class Buildings:
+    def __init__(self, data: gpd.GeoDataFrame):
+        assert type(data) == gpd.GeoDataFrame
+        self.data = data
 
-
-def write(buildings: gpd.GeoDataFrame):
-    pass
+    def write(self):
+        pass

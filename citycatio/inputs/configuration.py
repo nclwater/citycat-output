@@ -1,7 +1,7 @@
-def validate(configuration: dict):
-    assert type(configuration) == dict
-    return configuration
+class Configuration:
+    def __init__(self, data: dict):
+        assert isinstance(data, dict)
+        self.data = data
 
-
-def write(configuration: dict):
-    pass
+    def write(self):
+        pass

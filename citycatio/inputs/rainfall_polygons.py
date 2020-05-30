@@ -1,10 +1,10 @@
 import geopandas as gpd
 
 
-def validate(rainfall_polygons: gpd.GeoDataFrame):
-    assert type(rainfall_polygons) == gpd.GeoDataFrame
-    return rainfall_polygons
+class RainfallPolygons:
+    def __init__(self, data: gpd.GeoDataFrame):
+        assert type(data) == gpd.GeoDataFrame
+        self.data = data
 
-
-def write(rainfall_polygons: gpd.GeoDataFrame):
-    pass
+    def write(self):
+        pass

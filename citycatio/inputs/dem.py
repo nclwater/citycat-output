@@ -1,10 +1,10 @@
 import rasterio as rio
 
 
-def validate(dem: rio.DatasetReader):
-    assert type(dem) == rio.DatasetReader
-    return dem
+class Dem:
+    def __init__(self, data: rio.MemoryFile):
+        assert type(data) == rio.MemoryFile
+        self.data = data
 
-
-def write(dem: rio.DatasetReader):
-    pass
+    def write(self):
+        pass
