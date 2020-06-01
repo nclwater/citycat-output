@@ -7,6 +7,6 @@ setup(name='citycatio',
       author='Fergus McClean',
       author_email='fergus.mcclean@ncl.ac.uk',
       license='GPL-3.0',
-      packages=['citycatio'],
+      packages=['citycatio', 'citycatio.inputs'],
       zip_safe=False,
       install_requires=['geopandas', 'rasterio', 'netCDF4', 'pandas', 'numpy'])
