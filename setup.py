@@ -1,14 +1,12 @@
 from setuptools import setup
 
-setup(name='citycat_output',
+setup(name='citycatio',
       version='0.1.1',
-      description='Convert CityCAT outputs to netCDF',
-      url='https://github.com/nclwater/citycat-output',
+      description='CityCAT extension to create inputs and convert outputs',
+      url='https://github.com/nclwater/citycatio',
       author='Fergus McClean',
       author_email='fergus.mcclean@ncl.ac.uk',
       license='GPL-3.0',
-      packages=['citycat_output'],
+      packages=['citycatio', 'citycatio.inputs'],
       zip_safe=False,
-      install_requires=['netCDF4',
-                        'pandas',
-                        'gdal'])
+      install_requires=['geopandas', 'rasterio', 'netCDF4', 'pandas', 'numpy'])

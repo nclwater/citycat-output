@@ -1,4 +1,4 @@
-import citycat_output
+import citycatio
 import unittest
 import pandas as pd
 import numpy as np
@@ -8,7 +8,7 @@ import netCDF4 as nc
 import datetime
 
 
-class TestCore(unittest.TestCase):
+class TestOutput(unittest.TestCase):
     time_interval = 5
     folder = 'R1C1_SurfaceMaps'
     netcdf_path = folder + '.nc'
@@ -52,39 +52,39 @@ class TestCore(unittest.TestCase):
         os.remove(cls.dem_path)
 
     def test_get_times(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.get_times()
         self.assertIsInstance(run.times, cls=list)
 
     def test_get_steps(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.get_steps()
         self.assertIsInstance(run.steps, cls=list)
 
     def test_read_variables(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.read_variables(0)
         self.assertIsInstance(run.variables, cls=pd.DataFrame)
 
     def test_get_unique_coordinates(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.read_locations()
         run.get_unique_coordinates()
         self.assertIsInstance(run.x, np.ndarray)
 
     def test_read_locations(self):
-        results = citycat_output.Run(self.folder)
+        results = citycatio.Output(self.folder)
         results.read_locations()
         self.assertIsInstance(results.locations, cls=pd.DataFrame)
 
     def test_create_arrays(self):
-        results = citycat_output.Run(self.folder)
+        results = citycatio.Output(self.folder)
         results.read_locations()
         results.create_arrays()
         self.assertIsInstance(results.depth, cls=np.ndarray)
 
     def test_set_array_values(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.read_variables(0)
         run.read_locations()
         run.create_arrays()
@@ -92,12 +92,12 @@ class TestCore(unittest.TestCase):
         self.assertIsNotNone(run.depth.max())
 
     def test_read_file_paths(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.read_file_paths()
         self.assertIsInstance(run.file_paths, list)
 
     def test_to_netcdf(self):
-        run = citycat_output.Run(self.folder)
+        run = citycatio.Output(self.folder)
         run.to_netcdf(self.netcdf_path, srid=27700, attributes={'key': 'value'})
         ds = nc.Dataset(self.netcdf_path)
         self.assertIsNotNone(ds)
@@ -110,23 +110,23 @@ class TestCore(unittest.TestCase):
 
     def test_to_netcdf_attribute_names_are_strings(self):
         with self.assertRaises(AssertionError):
-            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={123: 'value'})
+            citycatio.Output(self.folder).to_netcdf(self.netcdf_path, attributes={123: 'value'})
 
     def test_to_netcdf_attribute_names_start_with_letter(self):
         with self.assertRaises(AssertionError):
-            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'1key': 'value'})
+            citycatio.Output(self.folder).to_netcdf(self.netcdf_path, attributes={'1key': 'value'})
 
     def test_to_netcdf_attribute_names_are_alphanumeric(self):
         with self.assertRaises(AssertionError):
-            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'key*': 'value'})
+            citycatio.Output(self.folder).to_netcdf(self.netcdf_path, attributes={'key*': 'value'})
 
     def test_to_netcdf_attribute_value_type(self):
         with self.assertRaises(AssertionError):
-            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'key': datetime.datetime.now()})
+            citycatio.Output(self.folder).to_netcdf(self.netcdf_path, attributes={'key': datetime.datetime.now()})
 
     def test_to_netcdf_attribute_value_types(self):
         with self.assertRaises(AssertionError):
-            citycat_output.Run(self.folder).to_netcdf(self.netcdf_path, attributes={'key': [datetime.datetime.now()]})
+            citycatio.Output(self.folder).to_netcdf(self.netcdf_path, attributes={'key': [datetime.datetime.now()]})
 
 
 if __name__ == '__main__':
