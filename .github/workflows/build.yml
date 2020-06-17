@@ -18,7 +18,7 @@ jobs:
         shell: cmd
 
       - name: build
-        run: "%CONDA%\Scripts\activate citycatio & python setup.py sdist bdist_wheel"
+        run: '%CONDA%\Scripts\activate citycatio & python setup.py sdist bdist_wheel'
         shell: cmd
 
       - name: publish
@@ -26,5 +26,5 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: "%CONDA%\Scripts\activate citycatio & pip install setuptools wheel twine & twine upload dist/*"
+        run: '%CONDA%\Scripts\activate citycatio & pip install setuptools wheel twine & twine upload dist/*'
         shell: cmd
