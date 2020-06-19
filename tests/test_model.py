@@ -34,7 +34,7 @@ class TestModel(unittest.TestCase):
     def test_model(self):
 
         Model(dem=dem_file, rainfall=pd.DataFrame([0]), rainfall_polygons=gpd.GeoDataFrame(),
-              buildings=gpd.GeoDataFrame(), green_areas=gpd.GeoDataFrame(), configuration={},
+              buildings=gpd.GeoDataFrame(), green_areas=gpd.GeoDataFrame(),
               friction=gpd.GeoDataFrame(), boundaries=gpd.GeoDataFrame())
 
     def test_write_model(self):
