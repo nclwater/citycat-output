@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityCAT I/O Documentation &#8212; CityCAT I/O  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="citycat-i-o-documentation">
+<h1>CityCAT I/O Documentation<a class="headerlink" href="#citycat-i-o-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-citycatio">
+<span id="citycatio-module"></span><h2>citycatio module<a class="headerlink" href="#module-citycatio" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="citycatio.Model">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dem</span></em>, <em class="sig-param"><span class="n">rainfall</span></em>, <em class="sig-param"><span class="n">rainfall_polygons</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">buildings</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">green_areas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">friction</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">open_boundaries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines input data to create a complete CityCAT model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dem</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryFile</span></code>) – Digital Elevation Model</p></li>
+<li><p><strong>rainfall</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – Rainfall time series</p></li>
+<li><p><strong>rainfall_polygons</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas corresponding to rainfall series</p></li>
+<li><p><strong>buildings</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas representing buildings which are extracted from the domain</p></li>
+<li><p><strong>green_areas</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas representing permeable land cover</p></li>
+<li><p><strong>friction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas with custom friction coefficients</p></li>
+<li><p><strong>open_boundaries</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas where the domain boundary should be open</p></li>
+<li><p><strong>**kwargs</strong> – Options to pass to <a class="reference internal" href="#citycatio.inputs.Configuration" title="citycatio.inputs.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">inputs.Configuration</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="citycatio.Model.dem">
+<code class="sig-name descname">dem</code><a class="headerlink" href="#citycatio.Model.dem" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.Dem" title="citycatio.inputs.Dem">inputs.Dem</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.rainfall">
+<code class="sig-name descname">rainfall</code><a class="headerlink" href="#citycatio.Model.rainfall" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.Rainfall" title="citycatio.inputs.Rainfall">inputs.Rainfall</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.configuration">
+<code class="sig-name descname">configuration</code><a class="headerlink" href="#citycatio.Model.configuration" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.Configuration" title="citycatio.inputs.Configuration">inputs.Configuration</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.rainfall_polygons">
+<code class="sig-name descname">rainfall_polygons</code><a class="headerlink" href="#citycatio.Model.rainfall_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.RainfallPolygons" title="citycatio.inputs.RainfallPolygons">inputs.RainfallPolygons</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.green_areas">
+<code class="sig-name descname">green_areas</code><a class="headerlink" href="#citycatio.Model.green_areas" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.GreenAreas" title="citycatio.inputs.GreenAreas">inputs.GreenAreas</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.friction">
+<code class="sig-name descname">friction</code><a class="headerlink" href="#citycatio.Model.friction" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.Friction" title="citycatio.inputs.Friction">inputs.Friction</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.open_boundaries">
+<code class="sig-name descname">open_boundaries</code><a class="headerlink" href="#citycatio.Model.open_boundaries" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.OpenBoundaries" title="citycatio.inputs.OpenBoundaries">inputs.OpenBoundaries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="citycatio.Model.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.Model.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates all input files in the directory given by path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Directory in which to create input files, will be created if it does not exists</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.Output">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.</code><code class="sig-name descname">Output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.Output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads CityCAT output files and converts them to a new format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Path to folder containing output files</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="citycatio.Output.path">
+<code class="sig-name descname">path</code><a class="headerlink" href="#citycatio.Output.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to folder containing output files</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.file_paths">
+<code class="sig-name descname">file_paths</code><a class="headerlink" href="#citycatio.Output.file_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Paths to output files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.current_time">
+<code class="sig-name descname">current_time</code><a class="headerlink" href="#citycatio.Output.current_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of minutes since start</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.variables">
+<code class="sig-name descname">variables</code><a class="headerlink" href="#citycatio.Output.variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table containing variables at current_time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.locations">
+<code class="sig-name descname">locations</code><a class="headerlink" href="#citycatio.Output.locations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table containing X and Y coordinates of cells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.unique_x">
+<code class="sig-name descname">unique_x</code><a class="headerlink" href="#citycatio.Output.unique_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unique x coordinates in locations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.unique_y">
+<code class="sig-name descname">unique_y</code><a class="headerlink" href="#citycatio.Output.unique_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unique y coordinates in locations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.x_size">
+<code class="sig-name descname">x_size</code><a class="headerlink" href="#citycatio.Output.x_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of unique_x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.y_size">
+<code class="sig-name descname">y_size</code><a class="headerlink" href="#citycatio.Output.y_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of unique_y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.x_inverse">
+<code class="sig-name descname">x_inverse</code><a class="headerlink" href="#citycatio.Output.x_inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indices to reconstruct all x values from unique_x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.y_inverse">
+<code class="sig-name descname">y_inverse</code><a class="headerlink" href="#citycatio.Output.y_inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indices to reconstruct all y values from unique_y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.depth">
+<code class="sig-name descname">depth</code><a class="headerlink" href="#citycatio.Output.depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D array of depth values at current_time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.x_velocity">
+<code class="sig-name descname">x_velocity</code><a class="headerlink" href="#citycatio.Output.x_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D array of x velocity values at current_time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.y_velocity">
+<code class="sig-name descname">y_velocity</code><a class="headerlink" href="#citycatio.Output.y_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D array of y velocity values at current_time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.max_depth">
+<code class="sig-name descname">max_depth</code><a class="headerlink" href="#citycatio.Output.max_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D array of maximum depth values since start</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Output.times">
+<code class="sig-name descname">times</code><a class="headerlink" href="#citycatio.Output.times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Times of each step in minutes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="citycatio.Output.to_netcdf">
+<code class="sig-name descname">to_netcdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">read_dem</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">start_time</span><span class="o">=</span><span class="default_value">datetime.datetime(1, 1, 1, 0, 0)</span></em>, <em class="sig-param"><span class="n">srid</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">attributes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.Output.to_netcdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts CityCAT results to a netCDF file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – path to create netCDF file, if not given then will copy self.path</p></li>
+<li><p><strong>read_dem</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether or not to include the DEM</p></li>
+<li><p><strong>start_time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>) – Start time to use when creating time steps</p></li>
+<li><p><strong>srid</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – EPSG Spatial Reference System Identifier of results files</p></li>
+<li><p><strong>attributes</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – Dictionary of key-value pairs to store as netCDF attributes
+Keys must begin with an alphabetic character and be alphanumeric, underscore is allowed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="citycatio-inputs-module">
+<h2>citycatio.inputs module<a class="headerlink" href="#citycatio-inputs-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-citycatio.inputs"></span><dl class="py class">
+<dt id="citycatio.inputs.Buildings">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Buildings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Buildings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areas representing buildings which are extracted from the domain</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing Polygons</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.Configuration">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Configuration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">rainfall_zones</span></em>, <em class="sig-param"><span class="n">permeable_areas_friction</span><span class="o">=</span><span class="default_value">0.035</span></em>, <em class="sig-param"><span class="n">impermeable_areas_friction</span><span class="o">=</span><span class="default_value">0.02</span></em>, <em class="sig-param"><span class="n">spatial_rainfall</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">output_interval</span><span class="o">=</span><span class="default_value">108000</span></em>, <em class="sig-param"><span class="n">initial_timestep</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">use_infiltration</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">hydraulic_conductivity</span><span class="o">=</span><span class="default_value">1.09</span></em>, <em class="sig-param"><span class="n">wetting_front_suction_head</span><span class="o">=</span><span class="default_value">11.01</span></em>, <em class="sig-param"><span class="n">effective_porosity</span><span class="o">=</span><span class="default_value">0.412</span></em>, <em class="sig-param"><span class="n">effective_saturation</span><span class="o">=</span><span class="default_value">0.3</span></em>, <em class="sig-param"><span class="n">roof_storage</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>General configuration options and infiltration parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Length of simulation in seconds</p></li>
+<li><p><strong>rainfall_zones</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of rainfall zones</p></li>
+<li><p><strong>permeable_areas_friction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Friction coefficient for permeable areas</p></li>
+<li><p><strong>impermeable_areas_friction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Friction coefficient for impermeable areas</p></li>
+<li><p><strong>spatial_rainfall</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether or not rainfall is spatially variable</p></li>
+<li><p><strong>output_interval</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Time in seconds between output files</p></li>
+<li><p><strong>initial_timestep</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Time in seconds between first and second model time steps</p></li>
+<li><p><strong>use_infiltration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether or not to include infiltration</p></li>
+<li><p><strong>hydraulic_conductivity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Hydraulic conductivity of green areas</p></li>
+<li><p><strong>wetting_front_suction_head</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Wetting front suction head of green areas</p></li>
+<li><p><strong>effective_porosity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Effective porosity of green areas</p></li>
+<li><p><strong>effective_saturation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Effective saturation of green areas</p></li>
+<li><p><strong>roof_storage</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Roof storage of buildings in metres</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.Dem">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Dem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Dem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Digital Elevation Model</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.Friction">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Friction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Friction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areas with custom friction coefficients</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.GreenAreas">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">GreenAreas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.GreenAreas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areas representing permeable land cover</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.OpenBoundaries">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">OpenBoundaries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.OpenBoundaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areas where the domain boundary should be open</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing Polygons</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.Rainfall">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Rainfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Rainfall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rainfall time series</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.RainfallPolygons">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">RainfallPolygons</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.RainfallPolygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areas corresponding to rainfall series</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-citycatio.utils">
+<span id="citycatio-utils-module"></span><h2>citycatio.utils module<a class="headerlink" href="#module-citycatio.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="citycatio.utils.geoseries_to_string">
+<code class="sig-prename descclassname">citycatio.utils.</code><code class="sig-name descname">geoseries_to_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geoseries</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index_first</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.utils.geoseries_to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>GeoSeries to CityCAT string representation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geoseries</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoSeries</span></code>) – Polygons to convert</p></li>
+<li><p><strong>index</strong> – Whether or not to include the index</p></li>
+<li><p><strong>index_first</strong> – Whether or not to place the index before the number of points</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>String representation readable by CityCAT</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>s (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">CityCAT I/O</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Newcastle University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

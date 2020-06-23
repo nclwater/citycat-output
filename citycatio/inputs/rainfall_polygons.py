@@ -4,6 +4,7 @@ import os
 
 
 class RainfallPolygons:
+    """Areas corresponding to rainfall series"""
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame
         self.data = data

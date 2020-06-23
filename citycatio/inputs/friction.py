@@ -4,6 +4,7 @@ import os
 
 
 class Friction:
+    """Areas with custom friction coefficients"""
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame
         self.data = data

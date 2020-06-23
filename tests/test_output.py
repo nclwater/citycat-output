@@ -70,7 +70,7 @@ class TestOutput(unittest.TestCase):
         run = citycatio.Output(self.folder)
         run.read_locations()
         run.get_unique_coordinates()
-        self.assertIsInstance(run.x, np.ndarray)
+        self.assertIsInstance(run.unique_x, np.ndarray)
 
     def test_read_locations(self):
         results = citycatio.Output(self.folder)

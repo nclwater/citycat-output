@@ -5,6 +5,23 @@ from xml.dom import minidom
 
 
 class Configuration:
+    """General configuration options and infiltration parameters
+
+    Args:
+        duration: Length of simulation in seconds
+        rainfall_zones: Number of rainfall zones
+        permeable_areas_friction: Friction coefficient for permeable areas
+        impermeable_areas_friction: Friction coefficient for impermeable areas
+        spatial_rainfall: Whether or not rainfall is spatially variable
+        output_interval: Time in seconds between output files
+        initial_timestep: Time in seconds between first and second model time steps
+        use_infiltration: Whether or not to include infiltration
+        hydraulic_conductivity: Hydraulic conductivity of green areas
+        wetting_front_suction_head: Wetting front suction head of green areas
+        effective_porosity: Effective porosity of green areas
+        effective_saturation: Effective saturation of green areas
+        roof_storage: Roof storage of buildings in metres
+    """
     def __init__(
             self,
             duration: int,

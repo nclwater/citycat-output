@@ -3,7 +3,12 @@ from ..utils import geoseries_to_string
 import os
 
 
-class Boundaries:
+class OpenBoundaries:
+    """Areas where the domain boundary should be open
+
+    Args:
+        data: Table containing Polygons
+    """
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame
         self.data = data

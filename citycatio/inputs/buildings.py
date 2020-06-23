@@ -4,6 +4,11 @@ import os
 
 
 class Buildings:
+    """Areas representing buildings which are extracted from the domain
+
+    Args:
+        data: Table containing Polygons
+    """
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame
         self.data = data

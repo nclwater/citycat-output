@@ -1,5 +1,4 @@
 from . import inputs
-from .output import Output
 import rasterio as rio
 import geopandas as gpd
 import pandas as pd
@@ -9,6 +8,27 @@ import shutil
 
 
 class Model:
+    """Combines input data to create a complete CityCAT model
+
+    Args:
+        dem: Digital Elevation Model
+        rainfall: Rainfall time series
+        rainfall_polygons: Areas corresponding to rainfall series
+        buildings: Areas representing buildings which are extracted from the domain
+        green_areas: Areas representing permeable land cover
+        friction: Areas with custom friction coefficients
+        open_boundaries: Areas where the domain boundary should be open
+        **kwargs: Options to pass to :class:`.inputs.Configuration`
+
+    Attributes:
+        dem (inputs.Dem)
+        rainfall (inputs.Rainfall)
+        configuration (inputs.Configuration)
+        rainfall_polygons (inputs.RainfallPolygons)
+        green_areas (inputs.GreenAreas)
+        friction (inputs.Friction)
+        open_boundaries (inputs.OpenBoundaries)
+    """
     def __init__(
             self,
             dem: rio.MemoryFile,
@@ -17,7 +37,7 @@ class Model:
             buildings: Optional[gpd.GeoDataFrame] = None,
             green_areas: Optional[gpd.GeoDataFrame] = None,
             friction: Optional[gpd.GeoDataFrame] = None,
-            boundaries: Optional[gpd.GeoDataFrame] = None,
+            open_boundaries: Optional[gpd.GeoDataFrame] = None,
             **kwargs
     ):
         self.dem = inputs.Dem(dem)
@@ -32,10 +52,14 @@ class Model:
         self.buildings = inputs.Buildings(buildings) if buildings is not None else None
         self.green_areas = inputs.GreenAreas(green_areas) if green_areas is not None else None
         self.friction = inputs.Friction(friction) if friction is not None else None
-        self.boundaries = inputs.Boundaries(boundaries) if boundaries is not None else None
-        self.output: Optional[Output] = None
+        self.open_boundaries = inputs.OpenBoundaries(open_boundaries) if open_boundaries is not None else None
 
-    def write(self, path):
+    def write(self, path: str):
+        """Creates all input files in the directory given by path
+
+        Args:
+            path: Directory in which to create input files, will be created if it does not exists
+        """
         if os.path.exists(path):
             shutil.rmtree(path)
         os.mkdir(path)
@@ -50,5 +74,5 @@ class Model:
             self.green_areas.write(path)
         if self.friction is not None:
             self.friction.write(path)
-        if self.boundaries is not None:
-            self.boundaries.write(path)
+        if self.open_boundaries is not None:
+            self.open_boundaries.write(path)

@@ -3,6 +3,7 @@ import os
 
 
 class Dem:
+    """Digital Elevation Model"""
     def __init__(self, data: rio.MemoryFile):
         assert type(data) == rio.MemoryFile
         self.data = data

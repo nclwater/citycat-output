@@ -7,6 +7,7 @@ from datetime import datetime
 import rasterio as rio
 from rasterio.mask import mask
 from shapely.geometry import box, mapping
+from typing import List
 
 
 datatype = "f4"
@@ -14,19 +15,42 @@ fill_value = nc.default_fillvals[datatype]
 
 
 class Output:
-    def __init__(self, path, read_dem=True, start_time=datetime(1, 1, 1)):
-        self.folder_path = path
-        self.read_dem = read_dem
-        self.start_time = start_time
+    """Reads CityCAT output files and converts them to a new format
+
+    Args:
+        path: Path to folder containing output files
+
+    Attributes:
+        path: Path to folder containing output files
+        file_paths (List[str]): Paths to output files
+        current_time (int): Number of minutes since start
+        variables (pd.DataFrame): Table containing variables at current_time
+        locations (pd.DataFrame): Table containing X and Y coordinates of cells
+        unique_x (np.array): Unique x coordinates in locations
+        unique_y (np.array): Unique y coordinates in locations
+        x_size (int): Length of unique_x
+        y_size (int): Length of unique_y
+        x_inverse (np.array): Indices to reconstruct all x values from unique_x
+        y_inverse (np.array): Indices to reconstruct all y values from unique_y
+        depth (np.array): 2D array of depth values at current_time
+        x_velocity (np.array): 2D array of x velocity values at current_time
+        y_velocity (np.array): 2D array of y velocity values at current_time
+        max_depth (np.array): 2D array of maximum depth values since start
+        times (List[int]): Times of each step in minutes
+
+    """
+    def __init__(self, path: str):
+        self.path = path
         self.file_paths = None
+        self.current_time = None
         self.variables = None
         self.locations = None
-        self.x = None
-        self.y = None
+        self.unique_x = None
+        self.unique_y = None
         self.x_size = None
         self.y_size = None
-        self.x_index = None
-        self.y_index = None
+        self.x_inverse = None
+        self.y_inverse = None
         self.depth = None
         self.x_velocity = None
         self.y_velocity = None
@@ -46,6 +70,7 @@ class Output:
         self.steps = [path_to_step(path) for path in self.file_paths]
 
     def read_variables(self, i):
+        self.current_time = i
         self.variables = pd.read_csv(self.file_paths[i], usecols=['Depth', 'Vx', 'Vy'], delimiter=' ')
 
     def read_locations(self):
@@ -55,14 +80,14 @@ class Output:
     def get_unique_coordinates(self):
         assert self.locations is not None, 'Locations must be read in first'
 
-        self.x, self.x_index = np.unique(self.locations['XCen'].values, return_inverse=True)
-        self.y, self.y_index = np.unique(self.locations['YCen'].values, return_inverse=True)
+        self.unique_x, self.x_inverse = np.unique(self.locations['XCen'].values, return_inverse=True)
+        self.unique_y, self.y_inverse = np.unique(self.locations['YCen'].values, return_inverse=True)
 
-        self.x_size = len(self.x)
-        self.y_size = len(self.y)
+        self.x_size = len(self.unique_x)
+        self.y_size = len(self.unique_y)
 
-        self.y_index = self.y_size - self.y_index - 1
-        self.y = self.y[::-1]
+        self.y_inverse = self.y_size - self.y_inverse - 1
+        self.unique_y = self.unique_y[::-1]
 
     def create_arrays(self):
         assert self.locations is not None, 'Locations must be read in first'
@@ -70,38 +95,46 @@ class Output:
         self.x_velocity = np.full((self.y_size, self.x_size), fill_value)
         self.y_velocity = np.full((self.y_size, self.x_size), fill_value)
         self.max_depth = np.full((self.y_size, self.x_size), fill_value)
-        self.max_depth[self.y_index, self.x_index] = 0
+        self.max_depth[self.y_inverse, self.x_inverse] = 0
 
     def set_array_values(self):
         assert self.depth is not None, 'Arrays must be created first'
 
-        self.depth[self.y_index, self.x_index] = self.variables.Depth.values
-        self.x_velocity[self.y_index, self.x_index] = self.variables.Vx.values
-        self.y_velocity[self.y_index, self.x_index] = self.variables.Vy.values
+        self.depth[self.y_inverse, self.x_inverse] = self.variables.Depth.values
+        self.x_velocity[self.y_inverse, self.x_inverse] = self.variables.Vx.values
+        self.y_velocity[self.y_inverse, self.x_inverse] = self.variables.Vy.values
         self.max_depth = np.max([self.max_depth, self.depth], axis=0)
 
     def read_file_paths(self):
 
-        self.file_paths = [os.path.join(self.folder_path, rsl) for rsl in os.listdir(self.folder_path)
+        self.file_paths = [os.path.join(self.path, rsl) for rsl in os.listdir(self.path)
                            if rsl.lower().endswith('.rsl')]
 
         self.file_paths.sort(key=path_to_step)
         
     def read_dem_values(self):
-        dem = rio.open(os.path.join(os.path.dirname(self.folder_path), 'Domain_DEM.ASC'))
-        bbox = box(min(self.x), min(self.y), max(self.x), max(self.y))
+        dem = rio.open(os.path.join(os.path.dirname(self.path), 'Domain_DEM.ASC'))
+        bbox = box(min(self.unique_x), min(self.unique_y), max(self.unique_x), max(self.unique_y))
         band, transform = mask(dem, shapes=[mapping(bbox)], crop=True, all_touched=True)
         band.astype(float)[band == dem.nodata] = fill_value
-        dem_var = self.ds.createVariable('dem', datatype, dimensions=('y', 'x'))
+        dem_var = self.ds.createVariable('dem', datatype, dimensions=('unique_y', 'unique_x'))
         dem_var[:] = band
         return dem_var
 
-    def to_netcdf(self, path: str = None, srid: int = None, attributes: dict = None):
+    def to_netcdf(self,
+                  path: str = None,
+                  read_dem: bool = True,
+                  start_time: datetime = datetime(1, 1, 1),
+                  srid: int = None,
+                  attributes: dict = None):
         """Converts CityCAT results to a netCDF file
 
-            :param path: path to store netCDF
-            :param srid: EPSG Spatial Reference System Identifier of results files
-            :param attributes: Dictionary of key-value pairs to store as netCDF attributes
+        Args:
+            path: path to create netCDF file, if not given then will copy self.path
+            read_dem: Whether or not to include the DEM
+            start_time: Start time to use when creating time steps
+            srid: EPSG Spatial Reference System Identifier of results files
+            attributes: Dictionary of key-value pairs to store as netCDF attributes
                 Keys must begin with an alphabetic character and be alphanumeric, underscore is allowed
         """
 
@@ -121,7 +154,7 @@ class Output:
                         '{} type must be one of {}'.format(key, allowed_attribute_types)
 
         if path is None:
-            path = os.path.join(os.path.dirname(self.folder_path), os.path.basename(self.folder_path) + '.nc')
+            path = os.path.join(os.path.dirname(self.path), os.path.basename(self.path) + '.nc')
 
         if os.path.exists(path):
             os.remove(path)
@@ -132,17 +165,17 @@ class Output:
         self.create_arrays()
 
         self.ds.createDimension("time", None)
-        self.ds.createDimension("x", self.x_size)
-        self.ds.createDimension("y", self.y_size)
+        self.ds.createDimension("unique_x", self.x_size)
+        self.ds.createDimension("unique_y", self.y_size)
 
-        dem = self.read_dem_values() if self.read_dem else None
+        dem = self.read_dem_values() if read_dem else None
 
-        depth = self.ds.createVariable("depth", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
-        x_vel = self.ds.createVariable("x_vel", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
-        y_vel = self.ds.createVariable("y_vel", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
-        max_depth = self.ds.createVariable("max_depth", datatype, ("y", "x",), zlib=True, least_significant_digit=3)
-        x_variable = self.ds.createVariable("x", datatype, ("x",), zlib=True)
-        y_variable = self.ds.createVariable("y", datatype, ("y",), zlib=True)
+        depth = self.ds.createVariable("depth", datatype, ("time", "unique_y", "unique_x",), zlib=True, least_significant_digit=3)
+        x_vel = self.ds.createVariable("x_vel", datatype, ("time", "unique_y", "unique_x",), zlib=True, least_significant_digit=3)
+        y_vel = self.ds.createVariable("y_vel", datatype, ("time", "unique_y", "unique_x",), zlib=True, least_significant_digit=3)
+        max_depth = self.ds.createVariable("max_depth", datatype, ("unique_y", "unique_x",), zlib=True, least_significant_digit=3)
+        x_variable = self.ds.createVariable("unique_x", datatype, ("unique_x",), zlib=True)
+        y_variable = self.ds.createVariable("unique_y", datatype, ("unique_y",), zlib=True)
         times = self.ds.createVariable("time", "f8", ("time",), zlib=True)
 
         depth.units = 'm'
@@ -152,9 +185,9 @@ class Output:
         x_variable.units = 'm'
         y_variable.units = 'm'
 
-        times.units = "minutes since {:%Y-%m-%d}".format(self.start_time).replace("-0", "-")
+        times.units = "minutes since {:%Y-%m-%d}".format(start_time).replace("-0", "-")
         times.calendar = "gregorian"
-        times.long_name = "Time in minutes since {:%Y-%m-%d}".format(self.start_time).replace("-0", "-")
+        times.long_name = "Time in minutes since {:%Y-%m-%d}".format(start_time).replace("-0", "-")
 
         for i in range(len(self.file_paths)):
 
@@ -168,8 +201,8 @@ class Output:
         max_depth[:] = self.max_depth
 
         times[:] = self.times
-        x_variable[:] = self.x
-        y_variable[:] = self.y
+        x_variable[:] = self.unique_x
+        y_variable[:] = self.unique_y
 
         if srid is not None:
             srs = osr.SpatialReference()

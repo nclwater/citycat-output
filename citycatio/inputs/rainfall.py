@@ -3,6 +3,7 @@ import os
 
 
 class Rainfall:
+    """Rainfall time series"""
     def __init__(self, data: pd.DataFrame):
         assert type(data) == pd.DataFrame
         assert len(data) > 0, 'Rainfall DataFrame is empty'
