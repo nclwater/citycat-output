@@ -1,4 +1,6 @@
 import geopandas as gpd
+from ..utils import geoseries_to_string
+import os
 
 
 class Buildings:
@@ -6,5 +8,6 @@ class Buildings:
         assert type(data) == gpd.GeoDataFrame
         self.data = data
 
-    def write(self):
-        pass
+    def write(self, path):
+        with open(os.path.join(path, 'Buildings.txt'), 'w') as f:
+            f.write(geoseries_to_string(self.data.geometry))

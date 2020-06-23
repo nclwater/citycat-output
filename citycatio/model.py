@@ -40,5 +40,7 @@ class Model:
         self.dem.write(path)
         self.rainfall.write(path)
         self.configuration.write(path)
+        if self.buildings is not None:
+            self.buildings.write(path)
         if self.boundaries is not None:
             self.boundaries.write(path)

@@ -42,5 +42,8 @@ class TestModel(unittest.TestCase):
         Model(dem=dem_file,
               rainfall=pd.DataFrame([0]),
               boundaries=gpd.GeoDataFrame(
-                  geometry=[Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)])])
+                  geometry=[Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)])]),
+              buildings=gpd.GeoDataFrame(
+                  geometry=[Polygon([(x_min, y_min), (x_min, y_min+res), (x_min+res, y_min+res),
+                                     (x_min+res, y_min), (x_min, y_min)])])
               ).write('tests/test_model')
