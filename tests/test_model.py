@@ -45,5 +45,11 @@ class TestModel(unittest.TestCase):
                   geometry=[Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)])]),
               buildings=gpd.GeoDataFrame(
                   geometry=[Polygon([(x_min, y_min), (x_min, y_min+res), (x_min+res, y_min+res),
-                                     (x_min+res, y_min), (x_min, y_min)])])
+                                     (x_min+res, y_min), (x_min, y_min)])]),
+              friction=gpd.GeoDataFrame(
+                  geometry=[Polygon([(x_max-res, y_max-res), (x_max, y_max-res), (x_max, y_max),
+                                     (x_max, y_max-res), (x_max-res, y_max-res)])],
+                  index=[0.03]
+              ),
+
               ).write('tests/test_model')

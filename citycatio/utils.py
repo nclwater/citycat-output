@@ -1,17 +1,20 @@
 import geopandas as gpd
 
 
-def geoseries_to_string(geoseries: gpd.GeoSeries, index=False):
+def geoseries_to_string(geoseries: gpd.GeoSeries, index=False, index_first=True):
     """GeoSeries to CityCAT string representation"""
     assert (geoseries.geom_type == 'Polygon').all(), 'Geometries must be of type Polygon'
 
     s = '{}\n'.format(len(geoseries))
 
     for idx, geometry in geoseries.items():
+        if not index:
+            s += '{}'.format(len(geometry.exterior.coords))
+        elif index_first:
+            s += '{} {}'.format(idx, len(geometry.exterior.coords))
+        else:
+            s += '{} {}'.format(len(geometry.exterior.coords), idx)
         x, y = geometry.exterior.coords.xy
-        if index:
-            s += '{} '.format(idx)
-        s += '{}'.format(len(geometry.exterior.coords))
         for x_val in x:
             s += ' {}'.format(x_val)
         for y_val in y:

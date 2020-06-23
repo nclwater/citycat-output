@@ -42,5 +42,7 @@ class Model:
         self.configuration.write(path)
         if self.buildings is not None:
             self.buildings.write(path)
+        if self.friction is not None:
+            self.friction.write(path)
         if self.boundaries is not None:
             self.boundaries.write(path)
