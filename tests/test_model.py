@@ -5,6 +5,7 @@ import rasterio as rio
 import numpy as np
 from rasterio.transform import Affine
 import geopandas as gpd
+from shapely.geometry import Polygon
 
 dem_file = rio.MemoryFile()
 x_min, y_max = 100, 500
@@ -38,4 +39,8 @@ class TestModel(unittest.TestCase):
               friction=gpd.GeoDataFrame(), boundaries=gpd.GeoDataFrame())
 
     def test_write_model(self):
-        Model(dem=dem_file, rainfall=pd.DataFrame([0])).write('tests/test_model')
+        Model(dem=dem_file,
+              rainfall=pd.DataFrame([0]),
+              boundaries=gpd.GeoDataFrame(
+                  geometry=[Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)])])
+              ).write('tests/test_model')
