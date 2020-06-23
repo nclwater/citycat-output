@@ -22,6 +22,8 @@ class Model:
     ):
         self.dem = inputs.Dem(dem)
         self.rainfall = inputs.Rainfall(rainfall)
+        if self.rainfall.spatial:
+            assert rainfall_polygons is not None, 'rainfall_polygons must be provided if len(rainfall.columns) > 1'
 
         self.configuration = inputs.Configuration(
             **{**dict(duration=rainfall.index[-1], rainfall_zones=len(rainfall.columns)), **kwargs})
@@ -40,8 +42,12 @@ class Model:
         self.dem.write(path)
         self.rainfall.write(path)
         self.configuration.write(path)
+        if self.rainfall_polygons is not None:
+            self.rainfall_polygons.write(path)
         if self.buildings is not None:
             self.buildings.write(path)
+        if self.green_areas is not None:
+            self.green_areas.write(path)
         if self.friction is not None:
             self.friction.write(path)
         if self.boundaries is not None:

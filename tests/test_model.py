@@ -51,5 +51,12 @@ class TestModel(unittest.TestCase):
                                      (x_max, y_max-res), (x_max-res, y_max-res)])],
                   index=[0.03]
               ),
+              green_areas=gpd.GeoDataFrame(
+                  geometry=[Polygon([(x_max-res, y_max-res), (x_max, y_max-res), (x_max, y_max),
+                                     (x_max, y_max-res), (x_max-res, y_max-res)])],
+                  index=[1]
+              ),
+              rainfall_polygons=gpd.GeoDataFrame(
+                  geometry=[Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)])])
 
               ).write('tests/test_model')

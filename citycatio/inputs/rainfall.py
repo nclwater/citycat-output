@@ -7,9 +7,10 @@ class Rainfall:
         assert type(data) == pd.DataFrame
         assert len(data) > 0, 'Rainfall DataFrame is empty'
         self.data = data
+        self.spatial = len(self.data.columns) > 1
 
     def write(self, path):
-        with open(os.path.join(path, 'Rainfall_Data_1.txt'), 'w') as f:
+        with open(os.path.join(path, '{}Rainfall_Data_1.txt'.format('Spatial_' if self.spatial else '')), 'w') as f:
             f.write('* * *\n')
             f.write('* * * rainfall * * *\n')
             f.write('* * *\n')
