@@ -17,4 +17,4 @@ class Rainfall:
             f.write('* * *\n')
             f.write('{}\n'.format(len(self.data)))
             f.write('* * *\n')
-            self.data.to_csv(f, sep=' ', header=False)
+            self.data.to_csv(f, sep=' ', header=False, line_terminator='\n')

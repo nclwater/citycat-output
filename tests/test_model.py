@@ -34,13 +34,13 @@ class TestModel(unittest.TestCase):
 
     def test_model(self):
 
-        Model(dem=dem_file, rainfall=pd.DataFrame([0]), rainfall_polygons=gpd.GeoDataFrame(),
+        Model(dem=dem_file, rainfall=pd.DataFrame([0, 0]), rainfall_polygons=gpd.GeoDataFrame(),
               buildings=gpd.GeoDataFrame(), green_areas=gpd.GeoDataFrame(),
               friction=gpd.GeoDataFrame(), open_boundaries=gpd.GeoDataFrame())
 
     def test_write_model(self):
         Model(dem=dem_file,
-              rainfall=pd.DataFrame([0]),
+              rainfall=pd.DataFrame([0, 0]),
               open_boundaries=gpd.GeoDataFrame(
                   geometry=[Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)])]),
               buildings=gpd.GeoDataFrame(

@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='citycatio',
-      version='0.2.0',
+      version='0.2.1',
       description='CityCAT extension to create inputs and convert outputs',
       url='https://github.com/nclwater/citycatio',
       author='Fergus McClean',
