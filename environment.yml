@@ -1,3 +1,5 @@
+name: citycatio
+
 channels:
   - conda-forge
 

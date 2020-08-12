@@ -9,22 +9,37 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: create environment
-        run: '%CONDA%\Scripts\activate & conda env create -n citycatio -f environment.yml'
-        shell: cmd
+      - name: Cache conda
+        uses: actions/cache@v1
+        env:
+          # Increase this value to reset cache if environment.yml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+
+      - name: Set up conda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          python-version: 3.8
+          activate-environment: citycatio
+          environment-file: environment.yml
+          use-only-tar-bz2: true
 
       - name: run tests
-        run: '%CONDA%\Scripts\activate citycatio & python -m unittest discover'
-        shell: cmd
+        run: python -m unittest discover
+        shell: bash -l {0}
 
       - name: build
-        run: '%CONDA%\Scripts\activate citycatio & python setup.py sdist bdist_wheel'
-        shell: cmd
+        run: python setup.py sdist bdist_wheel
+        shell: bash -l {0}
 
       - name: publish
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: '%CONDA%\Scripts\activate citycatio & pip install setuptools wheel twine & twine upload dist/*'
-        shell: cmd
+        run: |
+          pip install setuptools wheel twine
+          twine upload dist/*
+        shell: bash -l {0}
