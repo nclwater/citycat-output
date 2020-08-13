@@ -7,7 +7,8 @@ class Rainfall:
     def __init__(self, data: pd.DataFrame, spatial=False):
         assert type(data) == pd.DataFrame
         assert len(data) > 0, 'Rainfall DataFrame is empty'
-        assert len(data.columns) > 1 ^ ~ spatial
+        if len(data.columns) > 1:
+            assert spatial, 'if len(data.columns) > 1, spatial must be True'
         self.data = data
         self.spatial = spatial
 

@@ -41,12 +41,16 @@ class Model:
             **kwargs
     ):
         self.dem = inputs.Dem(dem)
-        self.rainfall = inputs.Rainfall(rainfall)
-        if self.rainfall.spatial:
-            assert rainfall_polygons is not None, 'rainfall_polygons must be provided if len(rainfall.columns) > 1'
+        spatial_rainfall = rainfall_polygons is not None
+        if len(rainfall.columns) > 1:
+            assert spatial_rainfall, 'if len(rainfall.columns) > 1, rainfall_polygons must be provided'
+        if spatial_rainfall:
+            assert len(rainfall.columns) == len(rainfall_polygons)
+        self.rainfall = inputs.Rainfall(rainfall, spatial=spatial_rainfall)
 
         self.configuration = inputs.Configuration(
-            **{**dict(duration=rainfall.index[-1], rainfall_zones=len(rainfall.columns)), **kwargs})
+            **{**dict(duration=rainfall.index[-1], rainfall_zones=len(rainfall.columns),
+                      spatial_rainfall=spatial_rainfall), **kwargs})
 
         self.rainfall_polygons = inputs.RainfallPolygons(rainfall_polygons) if rainfall_polygons is not None else None
         self.buildings = inputs.Buildings(buildings) if buildings is not None else None
