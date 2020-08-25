@@ -21,6 +21,7 @@ class Configuration:
         effective_porosity: Effective porosity of green areas
         effective_saturation: Effective saturation of green areas
         roof_storage: Roof storage of buildings in metres
+        create_max_depth_file: Whether or not to create a CSV file containing maximum depths
     """
     def __init__(
             self,
@@ -36,7 +37,8 @@ class Configuration:
             wetting_front_suction_head: float = 11.01,
             effective_porosity: float = 0.412,
             effective_saturation: float = 0.3,
-            roof_storage: float = 0
+            roof_storage: float = 0,
+            create_max_depth_file: bool = True
     ):
         self.duration = duration
         self.rainfall_zones = rainfall_zones
@@ -51,6 +53,7 @@ class Configuration:
         self.effective_porosity = effective_porosity
         self.effective_saturation = effective_saturation
         self.roof_storage = roof_storage
+        self.create_max_depth_file = create_max_depth_file
 
     def write(self, path):
 
@@ -118,7 +121,7 @@ class Configuration:
 
         max_depth = ET.SubElement(config, 'CreateMaxDepthFile')
         max_depth.set('fileformat', 'csv')
-        max_depth.text = 'False'
+        max_depth.text = str(self.create_max_depth_file)
 
         subsurface = ET.SubElement(config, 'SubsurfaceNetwork')
         subsurface.set('useNetworkModel', 'False')
