@@ -56,8 +56,7 @@ class TestModel(unittest.TestCase):
                                      (x_max, y_max-res), (x_max-res, y_max-res)])],
                   index=[1]
               ),
-              rainfall_polygons=gpd.GeoDataFrame(
-                  geometry=[
+              rainfall_polygons=gpd.GeoSeries([
                       Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)]),
                       Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)]),
                   ])

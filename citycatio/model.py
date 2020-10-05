@@ -33,7 +33,7 @@ class Model:
             self,
             dem: rio.MemoryFile,
             rainfall: pd.DataFrame,
-            rainfall_polygons: Optional[gpd.GeoDataFrame] = None,
+            rainfall_polygons: Optional[gpd.GeoSeries] = None,
             buildings: Optional[gpd.GeoDataFrame] = None,
             green_areas: Optional[gpd.GeoDataFrame] = None,
             friction: Optional[gpd.GeoDataFrame] = None,
