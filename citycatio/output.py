@@ -117,7 +117,7 @@ class Output:
         bbox = box(min(self.unique_x), min(self.unique_y), max(self.unique_x), max(self.unique_y))
         band, transform = mask(dem, shapes=[mapping(bbox)], crop=True, all_touched=True)
         band.astype(float)[band == dem.nodata] = fill_value
-        dem_var = self.ds.createVariable('dem', datatype, dimensions=('unique_y', 'unique_x'))
+        dem_var = self.ds.createVariable('dem', datatype, dimensions=('y', 'x'))
         dem_var[:] = band
         return dem_var
 
@@ -165,17 +165,17 @@ class Output:
         self.create_arrays()
 
         self.ds.createDimension("time", None)
-        self.ds.createDimension("unique_x", self.x_size)
-        self.ds.createDimension("unique_y", self.y_size)
+        self.ds.createDimension("x", self.x_size)
+        self.ds.createDimension("y", self.y_size)
 
         dem = self.read_dem_values() if read_dem else None
 
-        depth = self.ds.createVariable("depth", datatype, ("time", "unique_y", "unique_x",), zlib=True, least_significant_digit=3)
-        x_vel = self.ds.createVariable("x_vel", datatype, ("time", "unique_y", "unique_x",), zlib=True, least_significant_digit=3)
-        y_vel = self.ds.createVariable("y_vel", datatype, ("time", "unique_y", "unique_x",), zlib=True, least_significant_digit=3)
-        max_depth = self.ds.createVariable("max_depth", datatype, ("unique_y", "unique_x",), zlib=True, least_significant_digit=3)
-        x_variable = self.ds.createVariable("unique_x", datatype, ("unique_x",), zlib=True)
-        y_variable = self.ds.createVariable("unique_y", datatype, ("unique_y",), zlib=True)
+        depth = self.ds.createVariable("depth", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        x_vel = self.ds.createVariable("x_vel", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        y_vel = self.ds.createVariable("y_vel", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
+        max_depth = self.ds.createVariable("max_depth", datatype, ("y", "x",), zlib=True, least_significant_digit=3)
+        x_variable = self.ds.createVariable("x", datatype, ("x",), zlib=True)
+        y_variable = self.ds.createVariable("y", datatype, ("y",), zlib=True)
         times = self.ds.createVariable("time", "f8", ("time",), zlib=True)
 
         depth.units = 'm'
