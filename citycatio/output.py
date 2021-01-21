@@ -247,3 +247,36 @@ def path_to_step(path):
 
 def path_to_time(path):
     return int(os.path.basename(path).split('min')[0].split('_')[-1].split('.')[0])
+
+
+def to_geotiff(in_path, out_path, crs=None, delimeter=','):
+    from rasterio.transform import from_origin
+    df = pd.read_csv(in_path, delimiter=delimeter)
+    res = np.diff(np.unique(df.XCen.values)).min()
+
+    x = np.arange(df.XCen.min(), df.XCen.max() + 1, res)
+    y = np.arange(df.YCen.min(), df.YCen.max() + 1, res)
+
+    x_index = ((df.XCen - df.XCen.min()) / res).astype(int)
+    y_index = ((df.YCen.max() - df.YCen) / res).astype(int)
+
+    width = len(x)
+    height = len(y)
+
+    depth = np.full((height, width), fill_value)
+
+    depth[y_index, x_index] = df.Depth.values
+
+    with rio.open(
+            out_path,
+            'w',
+            driver='GTiff',
+            height=height,
+            width=width,
+            count=1,
+            dtype=depth.dtype,
+            crs=crs,
+            transform=from_origin(x.min() - res/2, y.max() + res/2, res, res),
+            nodata=fill_value
+    ) as dst:
+        dst.write(depth, 1)

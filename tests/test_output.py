@@ -108,6 +108,11 @@ class TestOutput(unittest.TestCase):
         self.assertTrue(ds.variables['dem'][0, 0] == 5)
         ds.close()
 
+    def test_to_geotiff(self):
+        run = citycatio.Output(self.folder)
+        path = run.file_paths[0]
+        citycatio.output.to_geotiff(path, os.path.join(self.folder, 'output.tif'), delimeter=' ')
+
     def test_to_netcdf_attribute_names_are_strings(self):
         with self.assertRaises(AssertionError):
             citycatio.Output(self.folder).to_netcdf(self.netcdf_path, attributes={123: 'value'})
