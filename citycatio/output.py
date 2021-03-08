@@ -2,7 +2,7 @@ import netCDF4 as nc
 import pandas as pd
 import os
 import numpy as np
-from gdal import osr
+from osgeo import osr
 from datetime import datetime
 import rasterio as rio
 from rasterio.mask import mask
