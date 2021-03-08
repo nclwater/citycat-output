@@ -277,6 +277,7 @@ def to_geotiff(in_path, out_path, crs=None, delimeter=','):
             dtype=depth.dtype,
             crs=crs,
             transform=from_origin(x.min() - res/2, y.max() + res/2, res, res),
-            nodata=fill_value
+            nodata=fill_value,
+            compress='lzw'
     ) as dst:
         dst.write(depth, 1)
