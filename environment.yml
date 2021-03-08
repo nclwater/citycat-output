@@ -4,6 +4,7 @@ channels:
   - conda-forge
 
 dependencies:
+  - gdal
   - geopandas
   - rasterio
   - netCDF4

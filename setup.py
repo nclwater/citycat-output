@@ -9,4 +9,4 @@ setup(name='citycatio',
       license='GPL-3.0',
       packages=['citycatio', 'citycatio.inputs'],
       zip_safe=False,
-      install_requires=['geopandas', 'rasterio', 'netCDF4', 'pandas', 'numpy'])
+      install_requires=['gdal', 'geopandas', 'rasterio', 'netCDF4', 'pandas', 'numpy'])
