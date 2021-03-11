@@ -1,5 +1,13 @@
 import pandas as pd
 import os
+import decimal
+
+ctx = decimal.Context()
+ctx.prec = 20
+
+
+def float_to_str(f):
+    return format(ctx.create_decimal(repr(f)), 'f')
 
 
 class Rainfall:
@@ -19,4 +27,4 @@ class Rainfall:
             f.write('* * *\n')
             f.write('{}\n'.format(len(self.data)))
             f.write('* * *\n')
-            self.data.to_csv(f, sep=' ', header=False, line_terminator='\n')
+            self.data.applymap(float_to_str).to_csv(f, sep=' ', header=False, line_terminator='\n')
