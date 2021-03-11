@@ -22,6 +22,7 @@ class Configuration:
         effective_saturation: Effective saturation of green areas
         roof_storage: Roof storage of buildings in metres
         create_max_depth_file: Whether or not to create a CSV file containing maximum depths
+        open_external_boundaries: Whether or not to set external boundaries as open
     """
     def __init__(
             self,
@@ -38,7 +39,8 @@ class Configuration:
             effective_porosity: float = 0.412,
             effective_saturation: float = 0.3,
             roof_storage: float = 0,
-            create_max_depth_file: bool = True
+            create_max_depth_file: bool = True,
+            open_external_boundaries: bool = True
     ):
         self.duration = duration
         self.rainfall_zones = rainfall_zones
@@ -54,6 +56,7 @@ class Configuration:
         self.effective_saturation = effective_saturation
         self.roof_storage = roof_storage
         self.create_max_depth_file = create_max_depth_file
+        self.open_external_boundaries = open_external_boundaries
 
     def write(self, path):
 
@@ -130,6 +133,9 @@ class Configuration:
         max_dx.text = '0.50'
         save_discharge = ET.SubElement(subsurface, 'SaveDischarge')
         save_discharge.text = 'False'
+
+        open_external_boundaries = ET.SubElement(config, 'OpenExternalBoundaries')
+        open_external_boundaries.text = str(self.open_external_boundaries)
 
         with open(os.path.join(path, 'CityCat_Config_1.txt'), 'w') as f:
 
