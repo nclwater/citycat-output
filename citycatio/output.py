@@ -253,9 +253,8 @@ def to_geotiff(in_path, out_path, crs=None, delimeter=','):
     from rasterio.transform import from_origin
     df = pd.read_csv(in_path, delimiter=delimeter)
     res = np.diff(np.unique(df.XCen.values)).min()
-
-    x = np.arange(df.XCen.min(), df.XCen.max() + 1, res)
-    y = np.arange(df.YCen.min(), df.YCen.max() + 1, res)
+    x = np.arange(df.XCen.min(), df.XCen.max() + res/2, res)
+    y = np.arange(df.YCen.min(), df.YCen.max() + res/2, res)
 
     x_index = ((df.XCen - df.XCen.min()) / res).astype(int)
     y_index = ((df.YCen.max() - df.YCen) / res).astype(int)
