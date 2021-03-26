@@ -23,6 +23,7 @@ class Configuration:
         roof_storage: Roof storage of buildings in metres
         create_max_depth_file: Whether or not to create a CSV file containing maximum depths
         open_external_boundaries: Whether or not to set external boundaries as open
+        buildings_algorithm: The algorithm to use when extracting buildings from the domain
     """
     def __init__(
             self,
@@ -40,7 +41,8 @@ class Configuration:
             effective_saturation: float = 0.3,
             roof_storage: float = 0,
             create_max_depth_file: bool = True,
-            open_external_boundaries: bool = True
+            open_external_boundaries: bool = True,
+            buildings_algorithm: int = 1
     ):
         self.duration = duration
         self.rainfall_zones = rainfall_zones
@@ -57,6 +59,7 @@ class Configuration:
         self.roof_storage = roof_storage
         self.create_max_depth_file = create_max_depth_file
         self.open_external_boundaries = open_external_boundaries
+        self.buildings_algorithm = buildings_algorithm
 
     def write(self, path):
 
@@ -136,6 +139,9 @@ class Configuration:
 
         open_external_boundaries = ET.SubElement(config, 'OpenExternalBoundaries')
         open_external_boundaries.text = str(self.open_external_boundaries)
+
+        buildings_algorithm = ET.SubElement(config, 'BuildingsAlgorithm')
+        buildings_algorithm.text = str(self.buildings_algorithm)
 
         with open(os.path.join(path, 'CityCat_Config_1.txt'), 'w') as f:
 
