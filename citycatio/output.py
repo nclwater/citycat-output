@@ -8,6 +8,7 @@ import rasterio as rio
 from rasterio.mask import mask
 from shapely.geometry import box, mapping
 from typing import List
+import click
 
 
 datatype = "f4"
@@ -280,3 +281,12 @@ def to_geotiff(in_path, out_path, crs=None, delimeter=','):
             compress='lzw'
     ) as dst:
         dst.write(depth, 1)
+
+
+@click.command()
+@click.option('--in_path', help='Input path')
+@click.option('--out_path', help='Output path')
+@click.option('--crs', help='Coordinate reference system')
+@click.option('--delimeter', help='Column delimeter of CSV file', default=',')
+def ccat2gtif(in_path, out_path, crs, delimeter):
+    to_geotiff(in_path, out_path, crs, delimeter)
