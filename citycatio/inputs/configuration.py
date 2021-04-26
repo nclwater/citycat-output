@@ -24,6 +24,7 @@ class Configuration:
         create_max_depth_file: Whether or not to create a CSV file containing maximum depths
         open_external_boundaries: Whether or not to set external boundaries as open
         buildings_algorithm: The algorithm to use when extracting buildings from the domain
+        permeable_areas: 0 means use the GreenAreas.txt file, 1 means all impermeable and 2 means all permeable
     """
     def __init__(
             self,
@@ -42,7 +43,8 @@ class Configuration:
             roof_storage: float = 0,
             create_max_depth_file: bool = True,
             open_external_boundaries: bool = True,
-            buildings_algorithm: int = 1
+            buildings_algorithm: int = 1,
+            permeable_areas: int = 0
     ):
         self.duration = duration
         self.rainfall_zones = rainfall_zones
@@ -60,6 +62,7 @@ class Configuration:
         self.create_max_depth_file = create_max_depth_file
         self.open_external_boundaries = open_external_boundaries
         self.buildings_algorithm = buildings_algorithm
+        self.permeable_areas = permeable_areas
 
     def write(self, path):
 
@@ -116,9 +119,8 @@ class Configuration:
         saturation = ET.SubElement(params, 'EffectiveSaturation')
         saturation.text = str(self.effective_saturation)
 
-        # 0 means use the Spatial_GreenAreas.txt file, 1 means all impermeable and 2 means all permeable
         permeable_areas = ET.SubElement(config, 'PermeableAreas')
-        permeable_areas.text = '0'
+        permeable_areas.text = str(self.permeable_areas)
 
         initial_conditions = ET.SubElement(config, 'InitSurfaceWaterElevation')
         initial_conditions.set('set', 'False')
