@@ -31,8 +31,8 @@ class Output:
         unique_y (np.array): Unique y coordinates in locations
         x_size (int): Length of unique_x
         y_size (int): Length of unique_y
-        x_inverse (np.array): Indices to reconstruct all x values from unique_x
-        y_inverse (np.array): Indices to reconstruct all y values from unique_y
+        x_index (np.array): X indices of each row
+        y_index (np.array): Y indices of each row
         depth (np.array): 2D array of depth values at current_time
         x_velocity (np.array): 2D array of x velocity values at current_time
         y_velocity (np.array): 2D array of y velocity values at current_time
@@ -50,8 +50,8 @@ class Output:
         self.unique_y = None
         self.x_size = None
         self.y_size = None
-        self.x_inverse = None
-        self.y_inverse = None
+        self.x_index = None
+        self.y_index = None
         self.depth = None
         self.x_velocity = None
         self.y_velocity = None
@@ -81,14 +81,16 @@ class Output:
     def get_unique_coordinates(self):
         assert self.locations is not None, 'Locations must be read in first'
 
-        self.unique_x, self.x_inverse = np.unique(self.locations['XCen'].values, return_inverse=True)
-        self.unique_y, self.y_inverse = np.unique(self.locations['YCen'].values, return_inverse=True)
+        res = np.diff(np.unique(self.locations.XCen.values)).min()
+
+        self.unique_x = np.arange(self.locations.XCen.min(), self.locations.XCen.max() + res / 2, res)
+        self.unique_y = np.arange(self.locations.YCen.min(), self.locations.YCen.max() + res / 2, res)
+
+        self.x_index = ((self.locations.XCen - self.locations.XCen.min()) / res).astype(int)
+        self.y_index = ((self.locations.YCen.max() - self.locations.YCen) / res).astype(int)
 
         self.x_size = len(self.unique_x)
         self.y_size = len(self.unique_y)
-
-        self.y_inverse = self.y_size - self.y_inverse - 1
-        self.unique_y = self.unique_y[::-1]
 
     def create_arrays(self):
         assert self.locations is not None, 'Locations must be read in first'
@@ -96,14 +98,14 @@ class Output:
         self.x_velocity = np.full((self.y_size, self.x_size), fill_value)
         self.y_velocity = np.full((self.y_size, self.x_size), fill_value)
         self.max_depth = np.full((self.y_size, self.x_size), fill_value)
-        self.max_depth[self.y_inverse, self.x_inverse] = 0
+        self.max_depth[self.y_index, self.x_index] = 0
 
     def set_array_values(self):
         assert self.depth is not None, 'Arrays must be created first'
 
-        self.depth[self.y_inverse, self.x_inverse] = self.variables.Depth.values
-        self.x_velocity[self.y_inverse, self.x_inverse] = self.variables.Vx.values
-        self.y_velocity[self.y_inverse, self.x_inverse] = self.variables.Vy.values
+        self.depth[self.y_index, self.x_index] = self.variables.Depth.values
+        self.x_velocity[self.y_index, self.x_index] = self.variables.Vx.values
+        self.y_velocity[self.y_index, self.x_index] = self.variables.Vy.values
         self.max_depth = np.max([self.max_depth, self.depth], axis=0)
 
     def read_file_paths(self):
