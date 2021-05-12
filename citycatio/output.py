@@ -92,7 +92,7 @@ def to_netcdf(
 
     times_var[:] = times
     x_var[:] = unique_x
-    y_var[:] = unique_y
+    y_var[::-1] = unique_y
 
     if srid is not None:
         srs = osr.SpatialReference()
@@ -138,8 +138,8 @@ def path_to_time(path):
 
 def get_transform(x, y):
     res = np.diff(np.unique(x)).min()
-    unique_x = np.arange(x.min(), x.max() + res / 2, res)
-    unique_y = np.arange(y.min(), y.max() + res / 2, res)
+    unique_x = np.arange(x.min(), x.max() + res, res)
+    unique_y = np.arange(y.min(), y.max() + res, res)
 
     x_index = ((x - x.min()) / res).astype(int)
     y_index = ((y.max() - y) / res).astype(int)
