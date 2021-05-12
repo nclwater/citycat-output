@@ -58,8 +58,6 @@ def to_netcdf(
     depth_array = np.full((y_size, x_size), fill_value)
     x_vel_array = np.full((y_size, x_size), fill_value)
     y_vel_array = np.full((y_size, x_size), fill_value)
-    max_depth = np.full((y_size, x_size), fill_value)
-    max_depth[y_index, x_index] = 0
 
     ds.createDimension("time", None)
     ds.createDimension("x", x_size)
@@ -68,7 +66,6 @@ def to_netcdf(
     depth_var = ds.createVariable("depth", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
     x_vel_var = ds.createVariable("x_vel", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
     y_vel_var = ds.createVariable("y_vel", datatype, ("time", "y", "x",), zlib=True, least_significant_digit=3)
-    max_depth = ds.createVariable("max_depth", datatype, ("y", "x",), zlib=True, least_significant_digit=3)
     x_var = ds.createVariable("x", datatype, ("x",), zlib=True)
     y_var = ds.createVariable("y", datatype, ("y",), zlib=True)
     times_var = ds.createVariable("time", "f8", ("time",), zlib=True)
@@ -76,7 +73,6 @@ def to_netcdf(
     depth_var.units = 'm'
     x_vel_var.units = 'm/s'
     y_vel_var.units = 'm/s'
-    max_depth.units = 'm'
     x_var.units = 'm'
     y_var.units = 'm'
 
