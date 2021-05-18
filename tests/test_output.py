@@ -61,7 +61,7 @@ class TestOutput(unittest.TestCase):
 
     def test_to_geotiff(self):
         path = os.path.join(self.folder, os.listdir(self.folder)[0])
-        citycatio.to_geotiff(path, os.path.join(self.folder, 'output.tif'), delimeter=' ')
+        citycatio.to_geotiff(path, os.path.join(self.folder, 'output.tif'), delimiter=' ', srid=27700)
 
     def test_to_netcdf_attribute_names_are_strings(self):
         with self.assertRaises(AssertionError):

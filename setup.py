@@ -10,5 +10,8 @@ setup(name='citycatio',
       packages=['citycatio', 'citycatio.inputs'],
       zip_safe=False,
       install_requires=['gdal', 'geopandas', 'rasterio', 'netCDF4', 'pandas', 'numpy'],
-      entry_points={'console_scripts': ['ccat2gtif=citycatio.output:ccat2gtif']},
+      entry_points={'console_scripts': [
+            'ccat2gtif=citycatio.output:ccat2gtif',
+            'ccat2netcdf=citycatio.output:ccat2netcdf',
+      ]},
       )

@@ -18,6 +18,17 @@ def to_netcdf(
         start_time: datetime = datetime(1, 1, 1),
         srid: int = None,
         attributes: dict = None):
+    """Converts CityCAT results to a netCDF file
+
+    Args:
+        in_path: path where CityCAT results files are located
+        out_path: path to create netCDF file
+            If not given then in_path will be used with an appended extension
+        start_time: Start time to use when creating time steps
+        srid: EPSG Spatial Reference System Identifier of results files
+        attributes: Dictionary of key-value pairs to store as netCDF attributes
+            Keys must begin with an alphabetic character and be alphanumeric, underscore is allowed
+    """
     
     if attributes is not None:
         for key in attributes.keys():
@@ -147,9 +158,17 @@ def get_transform(x, y):
     return res, unique_x, unique_y, x_index, y_index
 
 
-def to_geotiff(in_path, out_path, crs=None, delimeter=','):
+def to_geotiff(in_path, out_path, srid: int = None, delimiter: str = ','):
+    """Converts single CityCAT results file to GeoTIFF
+
+    Args:
+        in_path: path where CityCAT results file is located
+        out_path: path to create GeoTIFF file
+        srid: EPSG Spatial Reference System Identifier of results file
+        delimiter: Delimiter to use when reading the results file
+    """
     from rasterio.transform import from_origin
-    df = pd.read_csv(in_path, delimiter=delimeter)
+    df = pd.read_csv(in_path, delimiter=delimiter)
 
     res, unique_x, unique_y, x_index, y_index = get_transform(df.XCen, df.YCen)
 
@@ -168,7 +187,7 @@ def to_geotiff(in_path, out_path, crs=None, delimeter=','):
             width=width,
             count=1,
             dtype=depth.dtype,
-            crs=crs,
+            crs=f'EPSG:{srid}' if srid is not None else None,
             transform=from_origin(unique_x.min() - res/2, unique_y.max() + res/2, res, res),
             nodata=fill_value,
             compress='lzw'
@@ -179,7 +198,16 @@ def to_geotiff(in_path, out_path, crs=None, delimeter=','):
 @click.command()
 @click.option('--in_path', help='Input path')
 @click.option('--out_path', help='Output path')
-@click.option('--crs', help='Coordinate reference system')
-@click.option('--delimeter', help='Column delimeter of CSV file', default=',')
-def ccat2gtif(in_path, out_path, crs, delimeter):
-    to_geotiff(in_path, out_path, crs, delimeter)
+@click.option('--srid', help='Coordinate reference system')
+@click.option('--delimiter', help='Column delimiter of CSV file', default=',')
+def ccat2gtif(in_path, out_path, srid, delimiter):
+    to_geotiff(in_path, out_path, srid, delimiter)
+
+
+@click.command()
+@click.option('--in_path', help='Input path')
+@click.option('--out_path', help='Output path')
+@click.option('--srid', help='Coordinate reference system')
+@click.option('--start_time', help='Column delimeter of CSV file')
+def ccat2netcdf(in_path, out_path, srid, start_time):
+    to_netcdf(in_path, out_path, start_time, srid)
