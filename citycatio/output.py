@@ -208,6 +208,6 @@ def ccat2gtif(in_path, out_path, srid, delimiter):
 @click.option('--in_path', help='Input path')
 @click.option('--out_path', help='Output path')
 @click.option('--srid', help='Coordinate reference system')
-@click.option('--start_time', help='Column delimeter of CSV file')
+@click.option('--start_time', help='Start time of run', type=click.DateTime(formats=["%Y-%m-%dT%H:%M:%S"]))
 def ccat2netcdf(in_path, out_path, srid, start_time):
     to_netcdf(in_path, out_path, start_time, srid)
