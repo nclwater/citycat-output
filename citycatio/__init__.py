@@ -1,4 +1,4 @@
-from .output import Output
+from .output import to_netcdf, to_geotiff
 from .model import Model
 
-__all__ = ['Output', 'Model']
+__all__ = ['to_netcdf', 'to_geotiff', 'Model']
