@@ -152,8 +152,8 @@ def get_transform(x, y):
     unique_x = np.arange(x.min(), x.max() + res, res)
     unique_y = np.arange(y.min(), y.max() + res, res)
 
-    x_index = ((x - x.min()) / res).astype(int)
-    y_index = ((y.max() - y) / res).astype(int)
+    x_index = ((x - x.min()) / res).round(0).astype(int)
+    y_index = ((y.max() - y) / res).round(0).astype(int)
 
     return res, unique_x, unique_y, x_index, y_index
 
