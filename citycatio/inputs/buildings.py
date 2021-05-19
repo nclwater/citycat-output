@@ -7,7 +7,7 @@ class Buildings:
     """Areas representing buildings which are extracted from the domain
 
     Args:
-        data: Table containing Polygons
+        data: Table containing building polygons
     """
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame

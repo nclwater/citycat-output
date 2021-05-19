@@ -141,13 +141,13 @@
 <dl class="py function">
 <dt id="citycatio.to_geotiff">
 <code class="sig-prename descclassname">citycatio.</code><code class="sig-name descname">to_geotiff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_path</span></em>, <em class="sig-param"><span class="n">out_path</span></em>, <em class="sig-param"><span class="n">srid</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">delimiter</span><span class="o">=</span><span class="default_value">','</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.to_geotiff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert single CityCAT results file to GeoTIFF</p>
+<dd><p>Converts single CityCAT results file to GeoTIFF</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>in_path</strong> – path where CityCAT results file is located</p></li>
 <li><p><strong>out_path</strong> – path to create GeoTIFF file</p></li>
-<li><p><strong>srid</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – EPSG Spatial Reference System Identifier of results files</p></li>
+<li><p><strong>srid</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – EPSG Spatial Reference System Identifier of results file</p></li>
 <li><p><strong>delimiter</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Delimiter to use when reading the results file</p></li>
 </ul>
 </dd>
@@ -182,7 +182,7 @@ Keys must begin with an alphabetic character and be alphanumeric, underscore is 
 <dd><p>Areas representing buildings which are extracted from the domain</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing Polygons</p>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing building polygons</p>
 </dd>
 </dl>
 </dd></dl>
@@ -220,18 +220,33 @@ Keys must begin with an alphabetic character and be alphanumeric, underscore is 
 <dt id="citycatio.inputs.Dem">
 <em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Dem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Dem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Digital Elevation Model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryFile</span></code>) – Rasterio memory file containing DEM data</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt id="citycatio.inputs.Friction">
 <em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Friction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Friction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Areas with custom friction coefficients</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing friction polygons</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt id="citycatio.inputs.GreenAreas">
 <em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">GreenAreas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.GreenAreas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Areas representing permeable land cover</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing green areas polygons</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -240,7 +255,7 @@ Keys must begin with an alphabetic character and be alphanumeric, underscore is 
 <dd><p>Areas where the domain boundary should be open</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing Polygons</p>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>) – Table containing boundary polygons</p>
 </dd>
 </dl>
 </dd></dl>
@@ -249,12 +264,26 @@ Keys must begin with an alphabetic character and be alphanumeric, underscore is 
 <dt id="citycatio.inputs.Rainfall">
 <em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Rainfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">spatial</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Rainfall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rainfall time series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – Pandas DataFrame containing rainfall values</p></li>
+<li><p><strong>spatial</strong> – Whether the rainfall is spatially distributed or not
+If more than one column is included in data then then spatial must be True</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt id="citycatio.inputs.RainfallPolygons">
 <em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">RainfallPolygons</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.RainfallPolygons" title="Permalink to this definition">¶</a></dt>
 <dd><p>Areas corresponding to rainfall series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoSeries</span></code>) – Table containing rainfall polygons</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

@@ -3,7 +3,11 @@ import os
 
 
 class Dem:
-    """Digital Elevation Model"""
+    """Digital Elevation Model
+
+    Args:
+        data: Rasterio memory file containing DEM data
+    """
     def __init__(self, data: rio.MemoryFile):
         assert type(data) == rio.MemoryFile
         self.data = data

@@ -4,7 +4,12 @@ import os
 
 
 class GreenAreas:
-    """Areas representing permeable land cover"""
+    """Areas representing permeable land cover
+
+    Args:
+        data: Table containing green areas polygons
+
+    """
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame
         self.data = data

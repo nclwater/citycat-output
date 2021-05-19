@@ -11,7 +11,14 @@ def float_to_str(f):
 
 
 class Rainfall:
-    """Rainfall time series"""
+    """Rainfall time series
+
+    Args:
+        data: Pandas DataFrame containing rainfall values
+        spatial: Whether the rainfall is spatially distributed or not
+            If more than one column is included in data then then spatial must be True
+
+    """
     def __init__(self, data: pd.DataFrame, spatial=False):
         assert type(data) == pd.DataFrame
         assert len(data) > 0, 'Rainfall DataFrame is empty'

@@ -7,7 +7,7 @@ class OpenBoundaries:
     """Areas where the domain boundary should be open
 
     Args:
-        data: Table containing Polygons
+        data: Table containing boundary polygons
     """
     def __init__(self, data: gpd.GeoDataFrame):
         assert type(data) == gpd.GeoDataFrame

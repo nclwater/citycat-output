@@ -4,7 +4,11 @@ import os
 
 
 class RainfallPolygons:
-    """Areas corresponding to rainfall series"""
+    """Areas corresponding to rainfall series
+
+    Args:
+        data: Table containing rainfall polygons
+    """
     def __init__(self, data: gpd.GeoSeries):
         assert type(data) == gpd.GeoSeries
         self.data = data
