@@ -150,7 +150,7 @@ def path_to_time(path):
 def get_transform(x, y):
     res = np.diff(np.unique(x)).min()
     unique_x = np.arange(x.min(), x.max() + res, res)
-    unique_y = np.arange(y.max() + res, y.min(), -res)
+    unique_y = np.arange(y.max(), y.min() - res, -res)
 
     x_index = ((x - x.min()) / res).round(0).astype(int)
     y_index = ((y.max() - y) / res).round(0).astype(int)
