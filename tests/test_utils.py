@@ -2,6 +2,8 @@ from citycatio import utils
 import geopandas as gpd
 from shapely.geometry import Polygon
 from unittest import TestCase
+import os
+from click.testing import CliRunner
 
 geoseries = gpd.GeoSeries(
                 [
@@ -25,3 +27,13 @@ class TestUtils(TestCase):
             '2\n'
             '5 0.0 0.0 1.0 1.0 0.0 0.0 1.0 1.0 0.0 0.0\n' 
             '5 1.0 1.0 2.0 2.0 1.0 1.0 2.0 2.0 1.0 1.0\n')
+
+    def test_geom2ccat(self):
+        runner = CliRunner()
+        in_path = 'test_geom.gpkg'
+        out_path = 'tets_geom.txt'
+        gpd.GeoDataFrame(geometry=geoseries).to_file(in_path, driver='GPKG')
+        result = runner.invoke(utils.geom2ccat, f'--in_path {in_path} --out_path {out_path}')
+        assert result.exit_code == 0
+        os.remove(in_path)
+        os.remove(out_path)

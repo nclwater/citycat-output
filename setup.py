@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='citycatio',
-      version='0.7.3',
+      version='0.8.0',
       description='CityCAT extension to create inputs and convert outputs',
       url='https://github.com/nclwater/citycatio',
       author='Fergus McClean',
@@ -13,5 +13,6 @@ setup(name='citycatio',
       entry_points={'console_scripts': [
             'ccat2gtif=citycatio.output:ccat2gtif',
             'ccat2netcdf=citycatio.output:ccat2netcdf',
+            'geom2ccat=citycatio.utils:geom2ccat',
       ]},
       )

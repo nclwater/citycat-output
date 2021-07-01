@@ -1,4 +1,5 @@
 import geopandas as gpd
+import click
 
 
 def geoseries_to_string(geoseries: gpd.GeoSeries, index=False, index_first=True):
@@ -31,3 +32,11 @@ def geoseries_to_string(geoseries: gpd.GeoSeries, index=False, index_first=True)
         s += '\n'
 
     return s
+
+
+@click.command()
+@click.option('--in_path', help='Input path')
+@click.option('--out_path', help='Output path')
+def geom2ccat(in_path, out_path):
+    with open(out_path, 'w') as f:
+        f.write(geoseries_to_string(gpd.read_file(in_path).geometry))
