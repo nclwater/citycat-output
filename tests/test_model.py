@@ -36,7 +36,7 @@ class TestModel(unittest.TestCase):
 
         Model(dem=dem_file, rainfall=pd.DataFrame([0, 0]),
               buildings=gpd.GeoDataFrame(), green_areas=gpd.GeoDataFrame(),
-              friction=gpd.GeoDataFrame(), open_boundaries=gpd.GeoDataFrame())
+              friction=gpd.GeoDataFrame(), open_boundaries=gpd.GeoDataFrame(),)
 
     def test_write_model(self):
         Model(dem=dem_file,
@@ -59,6 +59,9 @@ class TestModel(unittest.TestCase):
               rainfall_polygons=gpd.GeoSeries([
                       Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)]),
                       Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)]),
-                  ])
+                  ]),
+              flow=pd.Series([1.1, 1.2], index=[0, 1]),
+              flow_polygons=gpd.GeoSeries(
+                  Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min), (x_min, y_min)]))
 
               ).write('tests/test_model')

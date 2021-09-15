@@ -38,6 +38,8 @@ class Model:
             green_areas: Optional[gpd.GeoDataFrame] = None,
             friction: Optional[gpd.GeoDataFrame] = None,
             open_boundaries: Optional[gpd.GeoDataFrame] = None,
+            flow: Optional[pd.Series] = None,
+            flow_polygons: Optional[gpd.GeoSeries] = None,
             **kwargs
     ):
         self.dem = inputs.Dem(dem)
@@ -57,6 +59,10 @@ class Model:
         self.green_areas = inputs.GreenAreas(green_areas) if green_areas is not None else None
         self.friction = inputs.Friction(friction) if friction is not None else None
         self.open_boundaries = inputs.OpenBoundaries(open_boundaries) if open_boundaries is not None else None
+        self.flow = inputs.Flow(flow) if flow is not None else None
+        self.flow_polygons = inputs.FlowPolygons(flow_polygons) if flow_polygons is not None else None
+        if self.flow is not None:
+            assert self.flow_polygons is not None, 'Flow series provided without polygons'
 
     def write(self, path: str):
         """Creates all input files in the directory given by path
@@ -80,3 +86,6 @@ class Model:
             self.friction.write(path)
         if self.open_boundaries is not None:
             self.open_boundaries.write(path)
+        if self.flow is not None:
+            self.flow.write(path)
+            self.flow_polygons.write(path)
