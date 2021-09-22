@@ -18,6 +18,8 @@ class Model:
         green_areas: Areas representing permeable land cover
         friction: Areas with custom friction coefficients
         open_boundaries: Areas where the domain boundary should be open
+        flow: Flow time series
+        flow_polygons: Areas corresponding to flow series
         **kwargs: Options to pass to :class:`.inputs.Configuration`
 
     Attributes:
@@ -28,6 +30,8 @@ class Model:
         green_areas (inputs.GreenAreas)
         friction (inputs.Friction)
         open_boundaries (inputs.OpenBoundaries)
+        flow (inputs.Flow)
+        flow_polygons (inputs.Flow)
     """
     def __init__(
             self,

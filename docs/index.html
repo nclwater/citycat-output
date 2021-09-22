@@ -39,7 +39,7 @@
 <span id="citycatio-module"></span><h2>citycatio module<a class="headerlink" href="#module-citycatio" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="citycatio.Model">
-<em class="property">class </em><code class="sig-prename descclassname">citycatio.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dem</span></em>, <em class="sig-param"><span class="n">rainfall</span></em>, <em class="sig-param"><span class="n">rainfall_polygons</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">buildings</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">green_areas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">friction</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">open_boundaries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dem</span></em>, <em class="sig-param"><span class="n">rainfall</span></em>, <em class="sig-param"><span class="n">rainfall_polygons</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">buildings</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">green_areas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">friction</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">open_boundaries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">flow</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">flow_polygons</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combines input data to create a complete CityCAT model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -51,6 +51,8 @@
 <li><p><strong>green_areas</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas representing permeable land cover</p></li>
 <li><p><strong>friction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas with custom friction coefficients</p></li>
 <li><p><strong>open_boundaries</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>]) – Areas where the domain boundary should be open</p></li>
+<li><p><strong>flow</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>]) – Flow time series</p></li>
+<li><p><strong>flow_polygons</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoSeries</span></code>]) – Areas corresponding to flow series</p></li>
 <li><p><strong>**kwargs</strong> – Options to pass to <a class="reference internal" href="#citycatio.inputs.Configuration" title="citycatio.inputs.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">inputs.Configuration</span></code></a></p></li>
 </ul>
 </dd>
@@ -121,6 +123,26 @@
 <dd><dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.OpenBoundaries" title="citycatio.inputs.OpenBoundaries">inputs.OpenBoundaries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.flow">
+<code class="sig-name descname">flow</code><a class="headerlink" href="#citycatio.Model.flow" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.Flow" title="citycatio.inputs.Flow">inputs.Flow</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="citycatio.Model.flow_polygons">
+<code class="sig-name descname">flow_polygons</code><a class="headerlink" href="#citycatio.Model.flow_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#citycatio.inputs.Flow" title="citycatio.inputs.Flow">inputs.Flow</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -223,6 +245,28 @@ Keys must begin with an alphabetic character and be alphanumeric, underscore is 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryFile</span></code>) – Rasterio memory file containing DEM data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.Flow">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">Flow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.Flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flow time series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>) – Pandas DataFrame containing flow values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="citycatio.inputs.FlowPolygons">
+<em class="property">class </em><code class="sig-prename descclassname">citycatio.inputs.</code><code class="sig-name descname">FlowPolygons</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#citycatio.inputs.FlowPolygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areas corresponding to flow series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">GeoSeries</span></code>) – Table containing flow polygons</p>
 </dd>
 </dl>
 </dd></dl>
